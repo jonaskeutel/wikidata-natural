@@ -1,0 +1,23 @@
+{
+  "name": "wikidata-natural",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "hjs": "~0.0.6",
+    "jade": "^1.11.0",
+    "less-middleware": "1.0.x",
+    "morgan": "~1.6.1",
+    "node-rest-client": "^1.8.0",
+    "serve-favicon": "~2.3.0",
+    "string-to-number": "^0.1.1",
+    "wikidata-search": "^1.0.3"
+  }
+}

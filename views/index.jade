@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Ask Wikidata
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
+  body
+    #container
+      #content
+        h1.center Ask Wikidata
+        //-<img src="/images/wikidata-stripes.png" width="100%" height="100px">
+        form.center(action="/", method="post")
+          input(type="text", name="question", id="question", placeholder=question)
+          input(type="submit", class="submitHidden", tabindex="-1")
+        if answer
+          #answer
+            .small
+              span Interpretation of the question: 
+              |#{interpretation}   
+            span Answer: 
+            |#{answer}

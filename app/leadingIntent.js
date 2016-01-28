@@ -16,6 +16,14 @@ exports.answer = function(question, callback) {
     });
 }
 
+exports.getTrainingData = function() {
+    return [
+        'who is leading china?',
+        'who is leading germany?',
+        'who is leading the usa?'
+    ]
+}
+
 function parse(question) {
 	var searchText;
 	if (question.indexOf('leading') > -1 ) {

@@ -16,6 +16,17 @@ exports.answer = function(question, callback) {
     });
 }
 
+exports.getTrainingData = function() {
+    return [
+        'when was jimmy wales born?',
+        'what is the birthday of barack obama?',
+        'what is the bithdate of sido?',
+        'when was messi born?',
+        'what is the birthday of ronaldinho?',
+        'what is the bithdate of oliver kahn?'
+    ]
+}
+
 function parse(question) {
 	var searchText;
 	if (question.indexOf('of') > -1 ) {

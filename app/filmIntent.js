@@ -15,11 +15,11 @@ exports.answer = function(question, callback) {
 }
 
 exports.answerFromParameter = function(parameter, callback) {
-    return {
+    callback(null, {
     	interpretation: 'What is the filmographie of ...? OR: What is the cast of ...?',
     	result: {},
     	speechOutput: 'This type of question needs to be answered, but it\'s still under development.'
-    }
+    });
 }
 
 function parse(question) {

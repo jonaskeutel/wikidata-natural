@@ -13,11 +13,11 @@ exports.answer = function(question, callback) {
 }
 
 exports.answerFromParameter = function(parameter, callback) {
-    return {
+    callback(null, {
     	interpretation: 'What is the date of death of ...?',
     	result: {},
     	speechOutput: 'This type of question needs to be answered, but it\'s still under development.'
-    }
+    });
 }
 
 function parse(question) {

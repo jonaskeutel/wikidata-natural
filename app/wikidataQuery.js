@@ -19,8 +19,8 @@ var QUESTION_NOT_UNDERSTOOD = {
 exports.mapAndAnswerQuestion = function(question, callback) {
     question = question.toLowerCase().replace(/[^a-z0-9 ]/g, '');
 
-    trainClassifier();
-    intentPosition = map(question);
+    this.trainClassifier();
+    intentPosition = this.map(question);
     intentArray[intentPosition].answer(question, function(err, result) {
         callback(result);
     });

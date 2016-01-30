@@ -10,6 +10,10 @@ var s2n = new string_to_number();
 
 exports.answer = function(question, callback) {
 	var parameter = parse(question);
+	this.answerFromParameter(parameter, callback);
+}
+
+exports.answerFromParameter = function(parameter, callback) {
 	async.waterfall([
         async.apply(wikidataIdLookup.getWikidataId, parameter),
         doBiggestCityWithFemaleMayorQuery,
@@ -20,9 +24,9 @@ exports.answer = function(question, callback) {
 
 exports.getTrainingData = function() {
 	return [
-		'what is the biggest city in spain with a female mayor?', 
-		'what are the 3 biggest cities in the usa that have a female mayor?', 
-		'what are the three biggest cities in the netherlands that are run by a female?'
+		'what is the biggest city in spain with a female mayor', 
+		'what are the 3 biggest cities in the usa that have a female mayor', 
+		'what are the three biggest cities in the netherlands that are run by a female'
 	]
 }
 function parse(question) {

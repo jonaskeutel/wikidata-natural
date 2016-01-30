@@ -27,7 +27,7 @@ router.post('/', function(req, res, next) {
 				answer: undefined
 			});
 	} else {
-		wikidataQuery.parseAndAnswerQuestion(question, function(result) {
+		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
 			res.render('index', 
 				{
 					question: question,

@@ -8,7 +8,11 @@ var async = require('async');
 
 exports.answer = function(question, callback) {
 	var parameter = parse(question);
-	async.waterfall([
+	this.answerFromParameter(parameter, callback);
+}
+
+exports.answerFromParameter = function(parameter, callback) {
+    async.waterfall([
         async.apply(wikidataIdLookup.getWikidataId, parameter),
         doWhoIsLeadingQuery,
     ], function (err, result) {
@@ -18,9 +22,11 @@ exports.answer = function(question, callback) {
 
 exports.getTrainingData = function() {
     return [
-        'who is leading china?',
-        'who is leading germany?',
-        'who is leading the usa?'
+        'who is leading china',
+        'who is leading germany',
+        'who is leading the usa',
+        'who is the leader of berlin',
+        'who is the leader of prague'
     ]
 }
 

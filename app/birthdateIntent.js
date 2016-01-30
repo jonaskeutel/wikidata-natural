@@ -8,7 +8,11 @@ var async = require('async');
 
 exports.answer = function(question, callback) {
 	var parameter = parse(question);
-	async.waterfall([
+	this.answerFromParameter(parameter, callback);
+}
+
+exports.answerFromParameter = function(parameter, callback) {
+    async.waterfall([
         async.apply(wikidataIdLookup.getWikidataId, parameter),
         doBirtdateQuery,
     ], function (err, result) {
@@ -18,12 +22,12 @@ exports.answer = function(question, callback) {
 
 exports.getTrainingData = function() {
     return [
-        'when was jimmy wales born?',
-        'what is the birthday of barack obama?',
-        'what is the bithdate of sido?',
-        'when was messi born?',
-        'what is the birthday of ronaldinho?',
-        'what is the bithdate of oliver kahn?'
+        'when was jimmy wales born',
+        'what is the birthday of barack obama',
+        'what is the bithdate of sido',
+        'when was messi born',
+        'what is the birthday of ronaldinho',
+        'what is the bithdate of oliver kahn'
     ]
 }
 

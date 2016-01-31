@@ -9,7 +9,9 @@ var string_to_number = require('string-to-number');
 var s2n = new string_to_number();
 
 exports.answer = function(question, callback) {
+	console.log("Trying to answer femaleMayorIntent");
 	var parameter = parse(question);
+	console.log("Parameters are: ", parameter);
 	this.answerFromParameter(parameter, callback);
 }
 
@@ -81,11 +83,17 @@ function doBiggestCityWithFemaleMayorQuery(data, callback) {
 
         var resultArray = jsonResponse.results.bindings;
         data.result = resultArray;
-        speechOutput = "The " + data.amount + " biggest cities in " + data.searchText + " that are run by a female are ";
-        for (var i = 0; i < resultArray.length - 1; i++) {
-            speechOutput += resultArray[i].cityLabel.value + ", ";
-        };
-        speechOutput += "and " + resultArray[resultArray.length - 1].cityLabel.value;
+        console.log("Result: ", resultArray);
+        if (data.amount == 1) {
+        	speechOutput = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
+        } else {
+        	speechOutput = "The " + data.amount + " biggest cities in " + data.searchText + " that are run by a female are ";
+	        for (var i = 0; i < resultArray.length - 1; i++) {
+	            speechOutput += resultArray[i].cityLabel.value + ", ";
+	        };
+	        speechOutput += "and " + resultArray[resultArray.length - 1].cityLabel.value;	
+        }
+        
         data.speechOutput = speechOutput;
         callback(null, data);
     });

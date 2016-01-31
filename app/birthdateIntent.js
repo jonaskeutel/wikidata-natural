@@ -39,7 +39,12 @@ function parse(question) {
 		var start = question.indexOf('is') > -1 ? question.indexOf('is') + 3 : question.indexOf('was') + 4
 		searchText = question.substring(start, question.indexOf('born') - 1 );
 	}
-	searchText = searchText.charAt(0).toUpperCase() + searchText.slice(1);
+    searchTerms = searchText.split(' ');
+    for (var i = 0; i < searchTerms.length; i++) {
+        searchTerms[i] = searchTerms[i].charAt(0).toUpperCase() + searchTerms[i].slice(1);
+    };
+    searchText = searchTerms.join(' ');
+	//searchText = searchText.charAt(0).toUpperCase() + searchText.slice(1);
 	var interpretation = 'When was ' + searchText + ' born?';
 	return { 
 		interpretation: interpretation,
@@ -59,7 +64,7 @@ function doBirtdateQuery(data, callback) {
 
         var resultDate = jsonResponse.results.bindings[0].date.value;
         resultDate = resultDate.substring(0, resultDate.search('T'));
-        data.speechOutput = data.searchText + " was born on " + resultDate;
+        data.speechOutput = data.searchText + " was born on " + resultDate + ".";
         callback(null, data);
     }); 
 }

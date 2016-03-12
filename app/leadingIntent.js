@@ -41,7 +41,7 @@ function parse(question) {
 			searchText = searchText.substring(3, searchText.length);
 	searchText = searchText.charAt(0).toUpperCase() + searchText.slice(1);
 	var interpretation = 'Who is leading ' + searchText + '?';
-	return { 
+	return {
 		interpretation: interpretation,
 		searchText: searchText
 	};

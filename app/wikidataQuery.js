@@ -1,15 +1,21 @@
 var bayes = require('bayes');
 var classifier = bayes();
-var mayorIntent = require('./femaleMayorIntent');
-var birthdateIntent = require('./birthdateIntent');
-var leadingIntent = require('./leadingIntent');
-var populationIntent = require('./populationIntent');
-var dateOfDeathIntent = require('./dateOfDeathIntent');
-var inceptionIntent = require('./inceptionIntent');
-var filmIntent = require('./filmIntent');
-var intentArray = [mayorIntent, birthdateIntent, leadingIntent, populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent];
 var natural = require('natural');
 natural.PorterStemmer.attach();
+var trainingData = require('./trainingData.json');
+//var mayorIntent = require('./femaleMayorIntentNew');
+//var birthdateIntent = require('./birthdateIntentNew');
+var leadingIntent = require('./leadingIntentNew').a(trainingData, classifier);
+// var populationIntent = require('./populationIntent');
+// var dateOfDeathIntent = require('./dateOfDeathIntent');
+// var inceptionIntent = require('./inceptionIntent');
+// var filmIntent = require('./filmIntent');
+var intentArray = [leadingIntent]; //mayorIntent, birthdateIntent, , populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent
+var intentNameToPositionMapping = {};
+
+for (var i = 0; i < intentArray.length; i++) {
+  intentNameToPositionMapping[intentArray[i].getName()] = i;
+}
 
 var QUESTION_NOT_UNDERSTOOD = {
     interpretation: 'I didn\'t understand the question. Please try asking the question in a different way. Maybe, this type of question isn\'t supported yet. In that case, feel free to contact the development team (TODO: Link einfügen)',
@@ -19,21 +25,10 @@ var QUESTION_NOT_UNDERSTOOD = {
 exports.mapAndAnswerQuestion = function(question, callback) {
     question = question.toLowerCase().replace(/[^a-z0-9 ]/g, '');
 
-    this.trainClassifier();
-    intentPosition = this.map(question);
+    intentPosition = intentNameToPositionMapping[this.map(question)];
     intentArray[intentPosition].answer(question, function(err, result) {
         callback(result);
     });
-}
-
-exports.trainClassifier = function() {
-    for (var i = 0; i < intentArray.length; i++) {
-        var trainingData = intentArray[i].getTrainingData();
-        for (var j = 0; j < trainingData.length; j++) {
-            // classifier.learn(trainingData[j].tokenizeAndStem().join(' '), intentArray[i].name());
-            classifier.learn(trainingData[j].tokenizeAndStem().join(' '), i);
-        };
-    };
 }
 
 exports.map = function(question) {

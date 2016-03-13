@@ -1,4 +1,4 @@
-(exports.a = function(data, classifier, name){
+exports.Intent = function(data, classifier, name){
 	var Client = require('node-rest-client').Client;
 	var client = new Client();
 	var StringDecoder = require('string_decoder').StringDecoder;
@@ -6,6 +6,8 @@
 	var queryBuilder = require('./queryBuilder');
 	var wikidataIdLookup = require('./wikidataIdLookup');
 	var async = require('async');
+	var string_to_number = require('string-to-number');
+	var s2n = new string_to_number();
 	var name = name;
 
 	var answer = function(question, callback) {
@@ -14,16 +16,23 @@
 	}
 
 	var answerFromParameter = function(parameter, callback) {
+			console.log("answerFromParameter()");
 	    this.async.waterfall([
 	        this.async.apply(this.wikidataIdLookup.getWikidataId, parameter),
+					this.getInterpretation,
 	        this.doQuery,
 	    ], function (err, result) {
-	        callback(null, result);
+					console.log(err);
+					if (err) {
+						result = {speechOutput: err};
+					}
+					console.log("result is (supposed to be same as what doQuery passes on): " + result);
+	        callback(err, result);
 	    });
 	}
 
 	var doQuery = function(data, callback) {
-		throw new Error("Not yet implemented!");
+		throw new Error("To be implemented be subclass.");
 	}
 
 	var trainClassifier = function(data, classifier) {
@@ -37,20 +46,27 @@
 		return this.name;
 	}
 
+	var getInterpretation = function(parameter, callback) {
+		throw new Error("To be implemented be subclass.");
+	}
+
 	var object = {
 		client: client,
 		decoder: decoder,
+		s2n: s2n,
 		queryBuilder: queryBuilder,
 		wikidataIdLookup: wikidataIdLookup,
 		async: async,
 		answer: answer,
 		answerFromParameter: answerFromParameter,
 		trainClassifier: trainClassifier,
+		name: name,
 		getName: getName,
-		doQuery: doQuery
+		doQuery: doQuery,
+		getInterpretation: getInterpretation
 	}
 
 	object.trainClassifier(data, classifier)
 
 	return object;
-})
+}

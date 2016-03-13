@@ -3,14 +3,14 @@ var classifier = bayes();
 var natural = require('natural');
 natural.PorterStemmer.attach();
 var trainingData = require('./trainingData.json');
-//var mayorIntent = require('./femaleMayorIntentNew');
-//var birthdateIntent = require('./birthdateIntentNew');
-var leadingIntent = require('./leadingIntentNew').a(trainingData, classifier);
+var mayorIntent = require('./femaleMayorIntent').Intent(trainingData, classifier);
+var birthdateIntent = require('./birthdateIntent').Intent(trainingData, classifier);
+var leadingIntent = require('./leadingIntent').Intent(trainingData, classifier);
 // var populationIntent = require('./populationIntent');
 // var dateOfDeathIntent = require('./dateOfDeathIntent');
 // var inceptionIntent = require('./inceptionIntent');
 // var filmIntent = require('./filmIntent');
-var intentArray = [leadingIntent]; //mayorIntent, birthdateIntent, , populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent
+var intentArray = [leadingIntent, mayorIntent, birthdateIntent]; // populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent
 var intentNameToPositionMapping = {};
 
 for (var i = 0; i < intentArray.length; i++) {

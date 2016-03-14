@@ -3,7 +3,6 @@ exports.Intent = function(data, classifier){
 	var parse = function(question) {
 		var number = findAmount(question);
 		var country = findCountry(question);
-		var interpretation;
 		return {
 			amount: number,
 			searchText: country

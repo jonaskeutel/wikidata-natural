@@ -2,7 +2,7 @@ var WikidataSearch = require('wikidata-search').WikidataSearch;
 var wikidataSearch = new WikidataSearch();
 
 exports.getWikidataId = function(data, callback) {
-    console.log("getWikidataId()");
+    console.log("getWikidataId(); trying to lookup: " + data.searchText);
     wikidataSearch.set('search', data.searchText);
     wikidataSearch.search(function(result, error) {
         console.log(error);

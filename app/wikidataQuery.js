@@ -23,8 +23,8 @@ var QUESTION_NOT_UNDERSTOOD = {
 }
 
 exports.mapAndAnswerQuestion = function(question, callback) {
-    question = question.toLowerCase().replace(/[^a-z0-9 ]/g, '');
-
+    console.log("mapAndAnswerQuestion: " + question);
+    question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
     intentPosition = intentNameToPositionMapping[this.map(question)];
     intentArray[intentPosition].answer(question, function(err, result) {
         callback(result);

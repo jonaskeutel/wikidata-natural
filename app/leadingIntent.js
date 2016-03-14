@@ -12,7 +12,6 @@ exports.Intent = function(data, classifier){
   	if (searchText.indexOf('the') == 0)
   			searchText = searchText.substring(3, searchText.length);
   	searchText = searchText.charAt(0).toUpperCase() + searchText.slice(1);
-  	var interpretation = 'Who is leading ' + searchText + '?';
   	return {
   		searchText: searchText
   	};
@@ -42,7 +41,7 @@ exports.Intent = function(data, classifier){
 
   var getInterpretation = function(data, callback) {
     console.log("Leading intent; getInterpretation()");
-    data.interpretation = "Who is leading " + data.label;
+    data.interpretation = "Who is leading " + data.label + "?";
     callback(null, data);
   }
 

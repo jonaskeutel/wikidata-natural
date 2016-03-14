@@ -30,7 +30,7 @@ exports.Intent = function(data, classifier){
               return;
           }
           data.result = jsonResponse.results.bindings[0].leaderLabel.value;
-          data.speechOutput = data.result + " is leading " + data.searchText + ".";
+          data.speechOutput = data.result + " is leading " + data.label + ".";
           console.log("doQuery passes on: " + data);
           callback(null, data);
       });

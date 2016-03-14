@@ -50,7 +50,7 @@ exports.Intent = function(data, classifier){
 	        if (data.amount == 1) {
 	        	speechOutput = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
 	        } else {
-	        	speechOutput = "The " + data.amount + " biggest cities in " + data.searchText + " that are run by a female are ";
+	        	speechOutput = "The " + data.amount + " biggest cities in " + data.label + " that are run by a female are ";
 		        for (var i = 0; i < resultArray.length - 1; i++) {
 		            speechOutput += resultArray[i].cityLabel.value + ", ";
 		        };

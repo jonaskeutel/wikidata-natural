@@ -31,7 +31,7 @@ exports.Intent = function(data, classifier){
 
 	        var resultDate = jsonResponse.results.bindings[0].date.value;
 	        resultDate = resultDate.substring(0, resultDate.search('T'));
-	        data.speechOutput = data.searchText + " was born on " + resultDate + ".";
+	        data.speechOutput = data.label + " was born on " + resultDate + ".";
 	        callback(null, data);
 	    });
 	};

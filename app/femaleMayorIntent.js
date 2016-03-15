@@ -39,7 +39,7 @@ exports.Intent = function(data, classifier){
 	        var jsonResponse = JSON.parse(intent.decoder.write(queryData));
 	        if (jsonResponse.results.bindings.length == 0) {
 	            data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
-	                            "You would do me a big favour if you could look it up and add it to Wikidata."
+	                            "You would do me a big favor if you could look it up and add it to Wikidata."
 	            callback(null, data);
 	            return;
 	        }

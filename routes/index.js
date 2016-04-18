@@ -11,10 +11,9 @@ router.get('/', function(req, res, next) {
 	var positionInArray = parseInt(Math.random() * PLACEHOLDER_QUESTIONS.length);
 	res.render('index',
 		{
-			question: PLACEHOLDER_QUESTIONS[positionInArray],
-			answer: undefined
-		});
-
+			placeholder: PLACEHOLDER_QUESTIONS[positionInArray]
+		}
+	);
 });
 
 router.post('/', function(req, res, next) {
@@ -23,17 +22,25 @@ router.post('/', function(req, res, next) {
 	if (!question) {
 		res.render('index',
 			{
-				question: PLACEHOLDER_QUESTIONS[positionInArray],
-				answer: undefined
+				placeholder: PLACEHOLDER_QUESTIONS[positionInArray]
 			});
 	} else {
 		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
 			res.render('index',
 				{
-					history: [{question:"Dummy hisstory question", interpretation: "That was interpreted differently", answer:"Dummy history answer"}, {question:"Another dummy history question", answer:"And another dummy history answer"}],
-					question: question,
-					answer: result.speechOutput,
-					interpretation: result.interpretation
+					conversation: [
+						{
+							question: "Dummy history question?",
+							interpretation: "That was interpreted differently",
+							answer: "Dummy history answer"
+						},
+						{
+							question: question,
+							interpretation: result.interpretation,
+							answer: result.speechOutput
+						}
+					],
+					placeholder: question
 				});
 		});
 	}

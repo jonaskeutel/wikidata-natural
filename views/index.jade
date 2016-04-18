@@ -16,6 +16,11 @@ html
           #answer
             .small
               span Interpretation of the question:
-              |&nbsp;#{interpretation}   
+              |&nbsp;#{interpretation}
             span Answer:
             |&nbsp;#{answer}
+        each value in history
+          .historyQuestion #{value['question']}
+            if value.interpretation
+              .historyInterpretation #{value['interpretation']}
+          .historyAnswer #{value.answer}

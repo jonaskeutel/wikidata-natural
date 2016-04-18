@@ -30,6 +30,7 @@ router.post('/', function(req, res, next) {
 		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
 			res.render('index',
 				{
+					history: [{question:"Dummy hisstory question", interpretation: "That was interpreted differently", answer:"Dummy history answer"}, {question:"Another dummy history question", answer:"And another dummy history answer"}],
 					question: question,
 					answer: result.speechOutput,
 					interpretation: result.interpretation

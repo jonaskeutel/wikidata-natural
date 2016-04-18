@@ -34,3 +34,7 @@ node_modules
 
 # zip files
 *.zip
+
+# IDE files
+*.sublime-workspace
+*.sublime-project

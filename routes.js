@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var wikidataQuery = require('./../app/wikidataQuery.js');
+var router = require('express').Router();
+
+var wikidataQuery = require('./app/wikidataQuery.js');
+
 var PLACEHOLDER_QUESTIONS = [
 	'Who is leading China?',
 	'What are the five biggest cities in Germany that have a female mayor?',

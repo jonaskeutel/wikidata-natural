@@ -2,6 +2,7 @@ doctype html
 html
   head
     title Ask Wikidata
+    script(src='/scripts/frontend.js')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
   body
@@ -10,8 +11,8 @@ html
       if conversation
         each value in conversation
           .question #{value['question']}
-            if value.interpretation
-              .interpretation #{value['interpretation']}
+          if value.interpretation
+            .interpretation #{value['interpretation']}
           .answer #{value.answer}
     form.center(action="/", method="post")
       input(type="text", name="question", id="question", autofocus, placeholder=placeholder)

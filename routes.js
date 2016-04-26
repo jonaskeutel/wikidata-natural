@@ -17,6 +17,24 @@ router.get('/', function(req, res, next) {
 	);
 });
 
+router.post('/ajax/', function(req, res, next) {
+	var question = req.body.question;
+	if (!question) {
+		return
+	}
+	try {
+		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
+			res.send(JSON.stringify({
+				interpretation: result.interpretation,
+				answer: result.speechOutput
+			}));
+		});
+	} catch (e) {
+		res.send(JSON.stringify({answer: e.stack.replace('\n','     \n')}));
+	}
+});
+
+
 router.post('/', function(req, res, next) {
 	var question = req.body.question;
 	var positionInArray = parseInt(Math.random() * PLACEHOLDER_QUESTIONS.length);

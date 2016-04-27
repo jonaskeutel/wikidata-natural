@@ -2,7 +2,7 @@ var bayes = require('bayes');
 var classifier = bayes();
 var natural = require('natural');
 natural.PorterStemmer.attach();
-var trainingData = require('./trainingData.json');
+var trainingData = require('./../public/trainingData.json');
 var mayorIntent = require('./femaleMayorIntent').Intent(trainingData, classifier);
 var birthdateIntent = require('./birthdateIntent').Intent(trainingData, classifier);
 var leadingIntent = require('./leadingIntent').Intent(trainingData, classifier);

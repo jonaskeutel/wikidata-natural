@@ -6,11 +6,12 @@ var trainingData = require('./../public/trainingData.json');
 var mayorIntent = require('./femaleMayorIntent').Intent(trainingData, classifier);
 var birthdateIntent = require('./birthdateIntent').Intent(trainingData, classifier);
 var leadingIntent = require('./leadingIntent').Intent(trainingData, classifier);
+var voldemortIntent = require('./voldemortIntent').Intent(trainingData, classifier);
 // var populationIntent = require('./populationIntent');
 // var dateOfDeathIntent = require('./dateOfDeathIntent');
 // var inceptionIntent = require('./inceptionIntent');
 // var filmIntent = require('./filmIntent');
-var intentArray = [leadingIntent, mayorIntent, birthdateIntent]; // populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent
+var intentArray = [leadingIntent, mayorIntent, birthdateIntent, voldemortIntent]; // populationIntent, dateOfDeathIntent, inceptionIntent, filmIntent
 var intentNameToPositionMapping = {};
 
 for (var i = 0; i < intentArray.length; i++) {

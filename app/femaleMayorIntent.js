@@ -46,7 +46,6 @@ exports.Intent = function(data, classifier){
 
 	        var resultArray = jsonResponse.results.bindings;
 	        data.result = resultArray;
-	        console.log("Result: ", resultArray);
 	        if (data.amount == 1) {
 	        	speechOutput = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
 	        } else {
@@ -63,7 +62,6 @@ exports.Intent = function(data, classifier){
 	};
 
   var getInterpretation = function(data, callback) {
-    console.log("Female mayor intent; getInterpretation()");
     var interpretation;
     if (data.amount == 1)
 			interpretation = 'What is the biggest city in ' + data.searchText + ' that has a female mayor?';

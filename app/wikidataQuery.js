@@ -23,11 +23,16 @@ var QUESTION_NOT_UNDERSTOOD = {
     speechOutput: 'I am sorry, but I don\'t know...'
 }
 
+var conversationHistory = require('./conversationHistory.js');
+
 exports.mapAndAnswerQuestion = function(question, callback) {
     console.log("mapAndAnswerQuestion: " + question);
+    questionId = conversationHistory.addQuestion(question);
     question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
     intentPosition = intentNameToPositionMapping[this.map(question)];
     intentArray[intentPosition].answer(question, function(err, result) {
+        conversationHistory.addInterpretation(result.interpretation, questionId);
+        conversationHistory.addAnswer(result.speechOutput, questionId);
         callback(result);
     });
 }

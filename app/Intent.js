@@ -16,23 +16,20 @@ exports.Intent = function(data, classifier, name){
 	}
 
 	var answerFromParameter = function(parameter, callback) {
-			console.log("answerFromParameter()");
 	    this.async.waterfall([
 	        this.async.apply(this.wikidataIdLookup.getWikidataId, parameter),
 					this.getInterpretation,
 	        this.doQuery,
 	    ], function (err, result) {
-					console.log(err);
 					if (err) {
 						result = {speechOutput: err};
 					}
-					console.log("result is (supposed to be same as what doQuery passes on): " + result);
 	        callback(err, result);
 	    });
 	}
 
 	var doQuery = function(data, callback) {
-		throw new Error("To be implemented be subclass.");
+		throw new Error("To be implemented by subclass.");
 	}
 
 	var trainClassifier = function(data, classifier) {
@@ -47,7 +44,7 @@ exports.Intent = function(data, classifier, name){
 	}
 
 	var getInterpretation = function(parameter, callback) {
-		throw new Error("To be implemented be subclass.");
+		throw new Error("To be implemented by subclass.");
 	}
 
 	var object = {

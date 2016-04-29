@@ -32,17 +32,7 @@ exports.mapAndAnswerQuestion = function(question, callback) {
     var words = lexer.lex(question)
     var taggedWords = tagger.tag(words);
 
-    var namedEntity = "";
-    for (i in taggedWords) {
-        var taggedWord = taggedWords[i];
-        var word = taggedWord[0];
-        var tag = taggedWord[1];
-        console.log(word + " / " + tag);
-        if (tag == "NNP") {
-          namedEntity += word + " ";
-        }
-    }
-    namedEntity = namedEntity.trim();
+    var namedEntity = findNamedEntity(taggedWords);
 
     question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
     intentPosition = intentNameToPositionMapping[this.map(question)];
@@ -60,4 +50,27 @@ exports.map = function(question) {
     var intentName = classifier.categorize(question.tokenizeAndStem().join(' '));
     console.log("Mapping returned: ", intentName);
     return intentName;
+}
+
+function findNamedEntity(taggedWords) {
+  var namedEntity = "";
+  var tags = ["NNP", "NN"];
+
+  // at first, try to find NNP or NNPS ("Proper Noun"); if this wasn't successful, also try "NN" or "NNS" ("Noun")
+  for (i in tags) {
+    for (j in taggedWords) {
+        var taggedWord = taggedWords[j];
+        var word = taggedWord[0];
+        var tag = taggedWord[1];
+        console.log(word + " / " + tag);
+        if (tag.startsWith(tags[i])) {
+          namedEntity += word + " ";
+        }
+    }
+    if (namedEntity != "") {
+      return namedEntity.trim();
+    }
+  }
+
+  return namedEntity.trim();
 }

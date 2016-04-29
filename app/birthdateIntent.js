@@ -37,7 +37,6 @@ exports.Intent = function(data, classifier){
 	};
 
   var getInterpretation = function(data, callback) {
-    console.log("Birthdate intent; getInterpretation()");
     data.interpretation = "When was " + data.label + " born?";
     callback(null, data);
   }

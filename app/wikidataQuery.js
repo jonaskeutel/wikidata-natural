@@ -32,20 +32,32 @@ exports.mapAndAnswerQuestion = function(question, callback) {
     var words = lexer.lex(question)
     var taggedWords = tagger.tag(words);
 
-    // for (i in taggedWords) {
-    //     var taggedWord = taggedWords[i];
-    //     var word = taggedWord[0];
-    //     var tag = taggedWord[1];
-    //     console.log(word + " / " + tag);
-    // }
+    var namedEntity = "";
+    for (i in taggedWords) {
+        var taggedWord = taggedWords[i];
+        var word = taggedWord[0];
+        var tag = taggedWord[1];
+        console.log(word + " / " + tag);
+        if (tag == "NNP") {
+          namedEntity += word + " ";
+        }
+    }
+    namedEntity = namedEntity.trim();
 
     question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
     intentPosition = intentNameToPositionMapping[this.map(question)];
     intentArray[intentPosition].answer(question, function(err, result) {
+        if (namedEntity == result.searchText) {
+          console.log("POS found same namedEntity as the intent: ", namedEntity);
+        } else {
+          console.log("Search text in result: " + result.searchText + ", while POS found: " + namedEntity);
+        }
         callback(result);
     });
 }
 
 exports.map = function(question) {
-    return classifier.categorize(question.tokenizeAndStem().join(' '));
+    var intentName = classifier.categorize(question.tokenizeAndStem().join(' '));
+    console.log("Mapping returned: ", intentName);
+    return intentName;
 }

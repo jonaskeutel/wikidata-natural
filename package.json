@@ -20,6 +20,7 @@
     "node-rest-client": "^1.8.0",
     "serve-favicon": "~2.3.0",
     "string-to-number": "^0.1.1",
+    "sync-request": "^3.0.1",
     "wikidata-search": "^1.0.3"
   }
 }

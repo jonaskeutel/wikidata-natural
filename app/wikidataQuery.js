@@ -2,6 +2,11 @@ var bayes = require('bayes');
 var classifier = bayes();
 var natural = require('natural');
 natural.PorterStemmer.attach();
+var pos = require('pos');
+
+var lexer = new pos.Lexer();
+var tagger = new pos.Tagger();
+
 var trainingData = require('./../public/trainingData.json');
 var mayorIntent = require('./femaleMayorIntent').Intent(trainingData, classifier);
 var birthdateIntent = require('./birthdateIntent').Intent(trainingData, classifier);
@@ -24,7 +29,16 @@ var QUESTION_NOT_UNDERSTOOD = {
 }
 
 exports.mapAndAnswerQuestion = function(question, callback) {
-    console.log("mapAndAnswerQuestion: " + question);
+    var words = lexer.lex(question)
+    var taggedWords = tagger.tag(words);
+
+    // for (i in taggedWords) {
+    //     var taggedWord = taggedWords[i];
+    //     var word = taggedWord[0];
+    //     var tag = taggedWord[1];
+    //     console.log(word + " / " + tag);
+    // }
+
     question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
     intentPosition = intentNameToPositionMapping[this.map(question)];
     intentArray[intentPosition].answer(question, function(err, result) {

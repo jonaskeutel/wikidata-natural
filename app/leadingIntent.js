@@ -2,7 +2,6 @@ exports.Intent = function(data, classifier){
   var intent = require('./Intent').Intent(data['leading'], classifier, 'leading');
 
   var parse = function(question) {
-    console.log("Leading intent; parse()");
   	var searchText;
   	if (question.indexOf('leading') > -1 ) {
   		searchText = question.substring(question.indexOf('leading') + 8, question.length);
@@ -18,10 +17,7 @@ exports.Intent = function(data, classifier){
   };
 
   var doQuery = function(data, callback) {
-      console.log("Leading intent; doQuery()");
-      console.log("doQuery receives: " + data);
       intent.req = intent.client.get( intent.queryBuilder.whoIsLeading(data.id), function(queryData, response) {
-          console.log("Call to Wikidata successful.");
           var jsonResponse = JSON.parse(intent.decoder.write(queryData));
           if (jsonResponse.results.bindings.length == 0) {
               data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
@@ -31,7 +27,6 @@ exports.Intent = function(data, classifier){
           }
           data.result = jsonResponse.results.bindings[0].leaderLabel.value;
           data.speechOutput = data.result + " is leading " + data.label + ".";
-          console.log("doQuery passes on: " + data);
           callback(null, data);
       });
       intent.req.on('error', function (err) {
@@ -40,7 +35,6 @@ exports.Intent = function(data, classifier){
   };
 
   var getInterpretation = function(data, callback) {
-    console.log("Leading intent; getInterpretation()");
     data.interpretation = "Who is leading " + data.label + "?";
     callback(null, data);
   }

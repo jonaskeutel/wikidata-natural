@@ -1,20 +1,16 @@
 var router = require('express').Router();
-
 var wikidataQuery = require('./app/wikidataQuery.js');
+var conversationHistory = require('./app/conversationHistory.js');
 
-var PLACEHOLDER_QUESTIONS = [
-	'Who is leading China?',
-	'What are the five biggest cities in Germany that have a female mayor?',
-	'When was Jimmy Wales born?'
-];
+router.get('/', function(req, res, next) {renderIndex(res)});
 
-router.get('/', function(req, res, next) {
-	var positionInArray = parseInt(Math.random() * PLACEHOLDER_QUESTIONS.length);
-	res.render('index',
-		{
-			placeholder: PLACEHOLDER_QUESTIONS[positionInArray]
-		}
-	);
+router.post('/', function(req, res, next) {
+	var question = req.body.question;
+	if (question) {
+		wikidataQuery.mapAndAnswerQuestion(question, function(){renderIndex(res)});
+	} else {
+		renderIndex(res)
+	}
 });
 
 router.post('/ajax/', function(req, res, next) {
@@ -34,35 +30,22 @@ router.post('/ajax/', function(req, res, next) {
 	}
 });
 
-
-router.post('/', function(req, res, next) {
-	var question = req.body.question;
-	var positionInArray = parseInt(Math.random() * PLACEHOLDER_QUESTIONS.length);
-	if (!question) {
-		res.render('index',
-			{
-				placeholder: PLACEHOLDER_QUESTIONS[positionInArray]
-			});
-	} else {
-		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
-			res.render('index',
+function renderIndex(res) {
+	res.render('index',
 				{
-					conversation: [
-						{
-							question: "Dummy history question?",
-							interpretation: "That was interpreted differently",
-							answer: "Dummy history answer"
-						},
-						{
-							question: question,
-							interpretation: result.interpretation,
-							answer: result.speechOutput
-						}
-					],
-					placeholder: question
+					conversation: conversationHistory.messages(),
+					placeholder: getPlaceholderQuestion()
 				});
-		});
-	}
-});
+}
+
+function getPlaceholderQuestion() {
+	var questions = [
+		'Who is leading China?',
+		'What are the five biggest cities in Germany that have a female mayor?',
+		'When was Jimmy Wales born?'
+	]
+	var index = Math.floor(Math.random() * questions.length);
+	return questions[index];
+}
 
 module.exports = router;

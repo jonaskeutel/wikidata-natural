@@ -168,6 +168,7 @@ function findPropertyAsDescription(taggedWords) {
 function lookupPropertyId(property) {
   var SIMILARITY_THRESHOLD = 0.6;
   // var possibleIds = []; // --> maybe we should return an array of possible ids so that we can decide later which fits best regarding the discourse
+
   var propertyId = false;
   var maxRating = 0;
   for (var i = 0; i < propertiesWithSynonyms.length; i++) {
@@ -182,7 +183,6 @@ function lookupPropertyId(property) {
         propertyId = propertiesWithSynonyms[i].id;
       }
     }
-
     if (bestRating == 1) {
       return propertyId;
     }

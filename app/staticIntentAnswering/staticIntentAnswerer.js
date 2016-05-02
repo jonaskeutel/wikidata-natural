@@ -11,7 +11,9 @@ var voldemortIntent = require('./voldemortIntent').Intent(trainingData, classifi
 var intentArray = [leadingIntent, mayorIntent, birthdateIntent, voldemortIntent];
 var intentNameToPositionMapping = {};
 
-exports.answer = function(question, conversationHistory, callback) {
+var conversationHistory = require('./../conversationHistory.js');
+
+exports.answer = function(question, callback) {
   var questionId = conversationHistory.addQuestion(question);
   question = question.toLowerCase().replace(/[^a-z0-9 äöüß]/g, '');
   intentPosition = intentNameToPositionMapping[map(question)];

@@ -1,5 +1,5 @@
 var stringSimilarity = require('string-similarity');
-var propertiesWithSynonyms = require('./../public/propertiesWithSynonyms.json');
+var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json');
 
 
 exports.findPropertyId = function(taggedWords) {

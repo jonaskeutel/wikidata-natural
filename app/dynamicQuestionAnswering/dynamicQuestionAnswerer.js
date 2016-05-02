@@ -27,14 +27,14 @@ exports.answer = function(question, callback, fallback) {
           data.interpretation = propertyId + " of " + data.label + "?";
           var jsonResponse = JSON.parse(decoder.write(queryData));
           if (jsonResponse.results.bindings.length == 0) {
-              data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
+              data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
                               "You would do me a big favor if you could look it up and add it to Wikidata."
               callback(data);
               return;
           }
           data.result = jsonResponse.results.bindings[0].objectLabel.value;
-          data.speechOutput = propertyId + " of " + data.label + " is " + data.result + ".";
-          console.log(data.speechOutput);
+          data.answer = propertyId + " of " + data.label + " is " + data.result + ".";
+          console.log(data.answer);
           callback(data);
       });
     } else {

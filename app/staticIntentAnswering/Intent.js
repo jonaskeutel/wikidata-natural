@@ -22,7 +22,7 @@ exports.Intent = function(data, classifier, name){
 	        this.doQuery,
 	    ], function (err, result) {
 					if (err) {
-						result = {speechOutput: err};
+						result = {answer: err};
 					}
 	        callback(err, result);
 	    });

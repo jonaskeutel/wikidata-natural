@@ -19,7 +19,7 @@ exports.answer = function(question, callback) {
   intentPosition = intentNameToPositionMapping[map(question)];
   intentArray[intentPosition].answer(question, function(err, result) {
       conversationHistory.addInterpretation(result.interpretation, questionId);
-      conversationHistory.addAnswer(result.speechOutput, questionId);
+      conversationHistory.addAnswer(result.answer, questionId);
       callback(result);
   });
 }

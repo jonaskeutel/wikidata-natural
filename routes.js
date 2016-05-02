@@ -22,7 +22,7 @@ router.post('/ajax/', function(req, res, next) {
 		wikidataQuery.answer(question, function(result) {
 			res.send(JSON.stringify({
 				interpretation: result.interpretation,
-				answer: result.speechOutput
+				answer: result.answer
 			}));
 		});
 	} catch (e) {

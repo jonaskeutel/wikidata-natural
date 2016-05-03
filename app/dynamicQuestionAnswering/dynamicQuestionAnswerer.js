@@ -21,7 +21,7 @@ exports.answer = function(question, callback, fallback) {
   var namedEntity = entityResolver.findNamedEntity(taggedWords);
   var propertyId = propertyResolver.findPropertyId(taggedWords);
 
-  wikidataIdLookup.getWikidataId({searchText: namedEntity}, function(err, data){
+  wikidataIdLookup.getWikidataIdRanked({searchText: namedEntity}, function(err, data){
     console.log('We are looking for ' + propertyId + ' of ' + data.id + ' (' + data.label + ')');
     if (data.id && propertyId) {
       // try it with dynamically found entities

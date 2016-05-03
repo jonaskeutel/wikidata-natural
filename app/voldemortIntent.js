@@ -6,7 +6,7 @@ exports.Intent = function(data, classifier){
   };
 
   var doQuery = function(data, callback) {
-		data.speechOutput = 'Yes, Rosa and Jonas are right: He wanted to keep his return secret. His idea was to gain power and has everything under control before he reveals his return to the public.';
+		data.speechOutput = 'One hears many things, my Lord. Whether the truth is among them is not clear.';
     callback(null, data);
   };
 

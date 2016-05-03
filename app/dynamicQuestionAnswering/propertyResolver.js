@@ -1,3 +1,6 @@
+var request = require('sync-request');
+var StringDecoder = require('string_decoder').StringDecoder;
+var decoder = new StringDecoder('utf8');
 var stringSimilarity = require('string-similarity');
 var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json');
 
@@ -8,7 +11,7 @@ exports.findPropertyId = function(taggedWords) {
     property = findPropertyAsDescription(taggedWords);
   }
   console.log("We found as the property you are looking for: ", property);
-  propertyId = lookupPropertyId(property);
+  propertyId = lookupPropertyIdViaApi(property);
   return propertyId;
 }
 
@@ -52,7 +55,7 @@ function findPropertyAsDescription(taggedWords) {
 }
 
 // returns propertyId that fits best, if there is no good fit: returns false
-function lookupPropertyId(property) {
+function lookupPropertyIdInJsonFile(property) {
   var SIMILARITY_THRESHOLD = 0.6;
   // var possibleIds = []; // --> maybe we should return an array of possible ids so that we can decide later which fits best regarding the discourse
 
@@ -74,5 +77,14 @@ function lookupPropertyId(property) {
       return propertyId;
     }
   }
+  return propertyId;
+}
+
+// returns propertyId that fits best, if there is no good fit: returns false
+function lookupPropertyIdViaApi(property) {
+  var propertyId = false;
+  var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + property;
+  var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
+  propertyId = queryData.search[0].id;
   return propertyId;
 }

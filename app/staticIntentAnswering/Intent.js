@@ -4,7 +4,7 @@ exports.Intent = function(data, classifier, name){
 	var StringDecoder = require('string_decoder').StringDecoder;
 	var decoder = new StringDecoder('utf8');
 	var queryBuilder = require('./queryBuilder');
-	var wikidataIdLookup = require('./wikidataIdLookup');
+	var wikidataIdLookup = require('./../wikidataIdLookup');
 	var async = require('async');
 	var string_to_number = require('string-to-number');
 	var s2n = new string_to_number();
@@ -22,7 +22,7 @@ exports.Intent = function(data, classifier, name){
 	        this.doQuery,
 	    ], function (err, result) {
 					if (err) {
-						result = {speechOutput: err};
+						result = {answer: err};
 					}
 	        callback(err, result);
 	    });

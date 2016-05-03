@@ -6,7 +6,7 @@ exports.Intent = function(data, classifier){
   };
 
   var doQuery = function(data, callback) {
-		data.speechOutput = 'One hears many things, my Lord. Whether the truth is among them is not clear.';
+		data.answer = 'One hears many things, my Lord. Whether the truth is among them is not clear.';
     callback(null, data);
   };
 

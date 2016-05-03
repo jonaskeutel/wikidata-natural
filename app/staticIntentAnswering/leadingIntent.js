@@ -20,13 +20,13 @@ exports.Intent = function(data, classifier){
       intent.req = intent.client.get( intent.queryBuilder.whoIsLeading(data.id), function(queryData, response) {
           var jsonResponse = JSON.parse(intent.decoder.write(queryData));
           if (jsonResponse.results.bindings.length == 0) {
-              data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
+              data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
                               "You would do me a big favor if you could look it up and add it to Wikidata."
               callback(null, data);
               return;
           }
           data.result = jsonResponse.results.bindings[0].leaderLabel.value;
-          data.speechOutput = data.result + " is leading " + data.label + ".";
+          data.answer = data.result + " is leading " + data.label + ".";
           callback(null, data);
       });
       intent.req.on('error', function (err) {

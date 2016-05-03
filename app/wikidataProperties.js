@@ -15,16 +15,16 @@ for (var i = 1; i < MAX_PROPERTY_NUMBER; i++) {
     continue;
   }
   var property = {};
-  property[pId] = {};
-  property[pId].label = queryData.entities[pId].labels.en.value;
-  property[pId].aliases = [];
+  property.id = pId;
+  property.label = queryData.entities[pId].labels.en.value;
+  property.aliases = [];
   var aliasesWbObjects = queryData.entities[pId].aliases.en;
 
   // not all properties have (english) aliases
 
   if (aliasesWbObjects) {
     for (var j = 0; j < aliasesWbObjects.length; j++) {
-      property[pId].aliases.push(aliasesWbObjects[j].value);
+      property.aliases.push(aliasesWbObjects[j].value);
     }
   }
   properties.push(property);

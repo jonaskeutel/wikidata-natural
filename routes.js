@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {renderIndex(res)});
 router.post('/', function(req, res, next) {
 	var question = req.body.question;
 	if (question) {
-		wikidataQuery.mapAndAnswerQuestion(question, function(){renderIndex(res)});
+		wikidataQuery.answer(question, function(){renderIndex(res)});
 	} else {
 		renderIndex(res)
 	}
@@ -19,10 +19,10 @@ router.post('/ajax/', function(req, res, next) {
 		return
 	}
 	try {
-		wikidataQuery.mapAndAnswerQuestion(question, function(result) {
+		wikidataQuery.answer(question, function(result) {
 			res.send(JSON.stringify({
 				interpretation: result.interpretation,
-				answer: result.speechOutput
+				answer: result.answer
 			}));
 		});
 	} catch (e) {

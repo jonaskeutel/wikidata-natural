@@ -23,7 +23,7 @@ exports.Intent = function(data, classifier){
 	    intent.client.get( intent.queryBuilder.dateOfBirth(data.id), function(queryData, response) {
 	        var jsonResponse = JSON.parse(intent.decoder.write(queryData));
 	        if (jsonResponse.results.bindings.length == 0) {
-	            data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
+	            data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
 	                            "You would do me a big favor if you could look it up and add it to Wikidata."
 	            callback(null, data);
 	            return;
@@ -31,7 +31,7 @@ exports.Intent = function(data, classifier){
 
 	        var resultDate = jsonResponse.results.bindings[0].date.value;
 	        resultDate = resultDate.substring(0, resultDate.search('T'));
-	        data.speechOutput = data.label + " was born on " + resultDate + ".";
+	        data.answer = data.label + " was born on " + resultDate + ".";
 	        callback(null, data);
 	    });
 	};

@@ -38,7 +38,7 @@ exports.Intent = function(data, classifier){
 	    intent.client.get( intent.queryBuilder.femaleMayors(data.id, data.amount), function(queryData, response) {
 	        var jsonResponse = JSON.parse(intent.decoder.write(queryData));
 	        if (jsonResponse.results.bindings.length == 0) {
-	            data.speechOutput = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
+	            data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
 	                            "You would do me a big favor if you could look it up and add it to Wikidata."
 	            callback(null, data);
 	            return;
@@ -47,16 +47,16 @@ exports.Intent = function(data, classifier){
 	        var resultArray = jsonResponse.results.bindings;
 	        data.result = resultArray;
 	        if (data.amount == 1) {
-	        	speechOutput = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
+	        	answer = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
 	        } else {
-	        	speechOutput = "The " + data.amount + " biggest cities in " + data.label + " that are run by a female are ";
+	        	answer = "The " + data.amount + " biggest cities in " + data.label + " that are run by a female are ";
 		        for (var i = 0; i < resultArray.length - 1; i++) {
-		            speechOutput += resultArray[i].cityLabel.value + ", ";
+		            answer += resultArray[i].cityLabel.value + ", ";
 		        };
-		        speechOutput += "and " + resultArray[resultArray.length - 1].cityLabel.value + ".";
+		        answer += "and " + resultArray[resultArray.length - 1].cityLabel.value + ".";
 	        }
 
-	        data.speechOutput = speechOutput;
+	        data.answer = answer;
 	        callback(null, data);
 	    });
 	};

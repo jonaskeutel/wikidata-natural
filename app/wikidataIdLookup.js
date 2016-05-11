@@ -67,11 +67,12 @@ function getWikidataIdViaWebpage(searchText, results, callback) {
     var url = 'https://www.wikidata.org/w/index.php?search=' + searchText.replace(new RegExp(' ', 'g'), '+');
     client.get(url, function(htmlData, response) {
         var doc = new dom().parseFromString(htmlData.toString());
-        var idDom = xpath.select("//span[@class='wb-itemlink-id'][1]/child::text()", doc)
-        var labelDom = xpath.select("//span[@class='wb-itemlink-label'][1]/child::text()", doc)
+        var idDom = xpath.select("//span[@class='wb-itemlink-id'][1]/child::text()", doc);
+        var labelDom = xpath.select("//span[@class='wb-itemlink-label'][1]/child::text()", doc);
         if(idDom.length == 0) {
             results.webpageId = null;
             results.webpageLabel = null;
+            callback();
         }
         results.webpageId = idDom[0].nodeValue.substring(1, idDom[0].nodeValue.length-1);
         results.webpageLabel = labelDom[0].nodeValue;

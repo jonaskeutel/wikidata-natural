@@ -22,8 +22,8 @@ exports.answer = function(question, callback, fallback) {
   var propertyId = propertyResolver.findPropertyId(taggedWords);
 
   wikidataIdLookup.getWikidataId({searchText: namedEntity}, function(err, data){
-    console.log('We are looking for ' + propertyId + ' of ' + data.id + ' (' + data.label + ')');
-    if (data.id && propertyId) {
+    if (!err && data.id && propertyId) {
+      console.log('We are looking for ' + propertyId + ' of ' + data.id + ' (' + data.label + ')');
       // try it with dynamically found entities
       client.get( queryBuilder.genercicSingleStatement(data.id, propertyId), function(queryData, response) {
           data.interpretation = propertyId + " of " + data.label + "?";

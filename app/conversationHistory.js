@@ -16,6 +16,16 @@ var conversationHistory = {
 
 	addAnswer: function(answer, id) {
 		m_messages[id].answer = answer;
+	},
+
+	// namedEntity is object with keys 'id' and 'label'
+	addNamedEntity: function(namedEntity, id) {
+		m_messages[id].namedEntity = namedEntity;
+	},
+
+	// property is object with keys 'id' and 'label'
+	addProperty: function(property, id) {
+		m_messages[id].property = property;
 	}
 }
 

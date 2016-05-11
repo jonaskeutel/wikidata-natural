@@ -2,35 +2,39 @@ var stringSimilarity = require('string-similarity');
 var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json');
 
 
-exports.findPropertyId = function(taggedWords) {
-  var property = findPropertyAsVerb(taggedWords);
-  if (property == "") {
-    property = findPropertyAsDescription(taggedWords);
+exports.findPropertyId = function(taggedWords, property, callback) {
+  var propertyString = findPropertyAsVerb(taggedWords);
+  if (propertyString == "") {
+    propertyString = findPropertyAsDescription(taggedWords);
   }
-  console.log("We found as the property you are looking for: ", property);
-  propertyId = lookupPropertyId(property);
-  return propertyId;
+  console.log("We found as the property you are looking for: ", propertyString);
+  propertyId = lookupPropertyId(propertyString);
+
+  property.id = propertyId;
+  property.label = propertyString;
+  callback();
+  return;
 }
 
 function findPropertyAsVerb(taggedWords) {
-  var property = "";
+  var propertyString = "";
   for (i in taggedWords) {
       var taggedWord = taggedWords[i];
       var word = taggedWord[0];
       var tag = taggedWord[1];
       if (tag.startsWith('V')) {
-        property += word + " ";
+        propertyString += word + " ";
       }
   }
 
-  property = property.toLowerCase().replace(/is|are|was|were|been/g, '');
-  return property.trim();
+  propertyString = propertyString.toLowerCase().replace(/is|are|was|were|been/g, '');
+  return propertyString.trim();
 }
 
 
 function findPropertyAsDescription(taggedWords) {
   // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
-  var property = "";
+  var propertyString = "";
   start = false;
 
   for (i in taggedWords) {
@@ -41,18 +45,18 @@ function findPropertyAsDescription(taggedWords) {
         if (tag == 'IN') {
           break;
         }
-        property += word + " ";
+        propertyString += word + " ";
       }
 
       if (tag == 'DT') {
         start = true;
       }
   }
-  return property.trim();
+  return propertyString.trim();
 }
 
 // returns propertyId that fits best, if there is no good fit: returns false
-function lookupPropertyId(property) {
+function lookupPropertyId(propertyString) {
   var SIMILARITY_THRESHOLD = 0.6;
   // var possibleIds = []; // --> maybe we should return an array of possible ids so that we can decide later which fits best regarding the discourse
 
@@ -61,7 +65,7 @@ function lookupPropertyId(property) {
   for (var i = 0; i < propertiesWithSynonyms.length; i++) {
     var allPossibleNames = propertiesWithSynonyms[i].aliases;
     allPossibleNames.push(propertiesWithSynonyms[i].label);
-    var bestMatch = stringSimilarity.findBestMatch(property, allPossibleNames);
+    var bestMatch = stringSimilarity.findBestMatch(propertyString, allPossibleNames);
     var bestRating = bestMatch.bestMatch.rating; // --> problem: 'cash' is more similar to 'cast' than 'cast member'...
     if (bestRating > SIMILARITY_THRESHOLD) {
       // possibleIds.push({'id': propertiesWithSynonyms[i].id, 'rating': bestRating > 0.6})

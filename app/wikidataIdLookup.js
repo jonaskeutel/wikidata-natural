@@ -14,7 +14,7 @@ exports.getWikidataId = function(data, callback) {
             && results.hasOwnProperty('webpageLabel')
             && results.hasOwnProperty('apiId')
             && results.hasOwnProperty('apiLabel')) {
-            // both queries complete
+            // both queries are complete
             if (results.apiId == null && results.webpageId == null) {
                 callback('Sorry, didn’t find a Wikidata item matching ' + data.searchText + '!', null);
                 return;
@@ -69,10 +69,11 @@ function getWikidataIdViaWebpage(searchText, results, callback) {
         var doc = new dom().parseFromString(htmlData.toString());
         var idDom = xpath.select("//span[@class='wb-itemlink-id'][1]/child::text()", doc);
         var labelDom = xpath.select("//span[@class='wb-itemlink-label'][1]/child::text()", doc);
-        if(idDom.length == 0) {
+        if (idDom.length == 0) {
             results.webpageId = null;
             results.webpageLabel = null;
             callback();
+            return;
         }
         results.webpageId = idDom[0].nodeValue.substring(1, idDom[0].nodeValue.length-1);
         results.webpageLabel = labelDom[0].nodeValue;

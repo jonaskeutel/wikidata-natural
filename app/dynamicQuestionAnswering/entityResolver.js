@@ -37,13 +37,20 @@ exports.findNamedEntity = function(taggedWords, namedEntity, callback) {
     }
   }
 
+  if (namedEntityString == "") {
+      namedEntity.id = null;
+      namedEntity.label = null;
+      callback();
+      return;
+  }
+
   wikidataIdLookup.getWikidataId({searchText: namedEntityString.trim()}, function(err, data) {
     if (err) {
-      property.id = null;
-      property.label = null;
+      namedEntity.id = null;
+      namedEntity.label = null;
     } else {
-      property.id = data.id;
-      property.label = data.label;
+      namedEntity.id = data.id;
+      namedEntity.label = data.label;
     }
     callback();
   })

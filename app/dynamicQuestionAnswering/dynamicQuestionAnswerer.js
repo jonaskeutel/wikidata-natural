@@ -25,6 +25,18 @@ exports.answer = function(question, callback, fallback) {
       if (Object.keys(property).length != 0 && Object.keys(namedEntity).length != 0) {
           // both queries are complete
           // TODO: Check if we have proper ids, otherwise look up ids from previous question (maybe look for keywords in question first (he/she/it...))
+          var conversation = conversationHistory.messages();
+          if (conversation.length > 1) {
+            if (!property.id) {
+              property = conversation[questionId - 1].property;
+            }
+            if (!namedEntity.id) {
+              namedEntity = conversation[questionId - 1].namedEntity;
+              console.log("Didn't find namedEntity in question; using instead: ", namedEntity);
+            }
+          }
+
+
           conversationHistory.addProperty(property, questionId);
           conversationHistory.addNamedEntity(namedEntity, questionId);
 
@@ -40,8 +52,9 @@ exports.answer = function(question, callback, fallback) {
                   return;
               }
               data.result = jsonResponse.results.bindings[0].objectLabel.value;
-              data.answer = propertyId + " of " + data.label + " is " + data.result + ".";
+              data.answer = property.label + " of " + namedEntity.label + " is " + data.result + ".";
               conversationHistory.addAnswer(data.answer, questionId);
+              conversationHistory.addAnswerEntity({id: jsonResponse.results.bindings[0].object.value, label: jsonResponse.results.bindings[0].objectLabel.value}, questionId)
               callback(data);
           }).on('error', function (err) {
           	console.log('something went wrong on the request', err.request.options);

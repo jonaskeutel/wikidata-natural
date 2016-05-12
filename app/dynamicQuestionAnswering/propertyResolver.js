@@ -12,6 +12,7 @@ exports.findPropertyId = function(taggedWords, property, callback) {
   }
 
   console.log("We found as the property you are looking for: ", propertyString);
+
   if (propertyString != "") {
     propertyId = lookupPropertyIdViaApi(propertyString);
     if( propertyId) {
@@ -25,8 +26,6 @@ exports.findPropertyId = function(taggedWords, property, callback) {
   property.label = null;
   callback();
   return;
-
-
 }
 
 function findPropertyAsVerb(taggedWords) {
@@ -99,6 +98,7 @@ function lookupPropertyIdViaApi(property) {
   var propertyId = false;
   var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + property;
   var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
+  console.log(queryData.searchinfo.search);
   if(queryData.search[0]) {
     propertyId = queryData.search[0].id;
   }

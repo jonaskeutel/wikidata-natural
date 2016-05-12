@@ -31,7 +31,7 @@ exports.answer = function(question, callback, fallback) {
               property = conversation[questionId - 1].property;
             }
             if (!namedEntity.id) {
-              namedEntity = conversation[questionId - 1].namedEntity;
+              namedEntity = conversation[questionId - 1].answerEntity;
               console.log("Didn't find namedEntity in question; using instead: ", namedEntity);
             }
           }
@@ -54,7 +54,8 @@ exports.answer = function(question, callback, fallback) {
               data.result = jsonResponse.results.bindings[0].objectLabel.value;
               data.answer = property.label + " of " + namedEntity.label + " is " + data.result + ".";
               conversationHistory.addAnswer(data.answer, questionId);
-              conversationHistory.addAnswerEntity({id: jsonResponse.results.bindings[0].object.value, label: jsonResponse.results.bindings[0].objectLabel.value}, questionId)
+              var answerIdPart = jsonResponse.results.bindings[0].object.value;
+              conversationHistory.addAnswerEntity({id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length), label: jsonResponse.results.bindings[0].objectLabel.value}, questionId)
               callback(data);
           }).on('error', function (err) {
           	console.log('something went wrong on the request', err.request.options);

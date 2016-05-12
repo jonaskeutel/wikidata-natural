@@ -12,12 +12,21 @@ exports.findPropertyId = function(taggedWords, property, callback) {
   }
 
   console.log("We found as the property you are looking for: ", propertyString);
-  propertyId = lookupPropertyIdViaApi(property);
-
-  property.id = propertyId;
-  property.label = propertyString;
+  if (propertyString != "") {
+    propertyId = lookupPropertyIdViaApi(propertyString);
+    if( propertyId) {
+      property.id = propertyId;
+      property.label = propertyString;
+      callback();
+      return;
+    }
+  }
+  property.id = null;
+  property.label = null;
   callback();
   return;
+
+
 }
 
 function findPropertyAsVerb(taggedWords) {

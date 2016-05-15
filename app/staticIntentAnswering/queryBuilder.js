@@ -1,3 +1,5 @@
+"use strict";
+
 var querystring = require("querystring");
 
 var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel WHERE { " +
@@ -53,4 +55,4 @@ exports.femaleMayors = function(itemId, number) {
 exports.whoIsLeading = function(itemId) {
     var leadingQuery = WHO_IS_LEADING_QUERY.replace("[ITEM_ID]", itemId);
     return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + leadingQuery});
-}
+};

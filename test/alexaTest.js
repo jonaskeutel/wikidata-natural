@@ -1,22 +1,24 @@
+"use strict";
+
 var assert = require('assert');
 var alexa = require('./../index');
 
-var success = undefined;
+var success;
 
 var succeedFunction = function(response){
     success = response.response.outputSpeech.text.indexOf('help') > -1;
     console.log(response.response.outputSpeech.text);
-}
+};
 
 var failFunction = function(err){
     console.log(err);
-    succees = false;
-}
+    success = false;
+};
 
 var context = {
     succeed: succeedFunction,
     fail: failFunction
-}
+};
 
 var mayorEvent = {
     session : {
@@ -38,7 +40,7 @@ var mayorEvent = {
             }
         }
     }
-}
+};
 
 var helpEvent = {
     session : {
@@ -52,7 +54,7 @@ var helpEvent = {
             name: "HelpIntent"
         }
     }
-}
+};
 
 var questionNotUnderstoodEvent = {
     session : {
@@ -66,22 +68,22 @@ var questionNotUnderstoodEvent = {
             name: "random not existing stuff"
         }
     }
-}
+};
 
 describe('alexaTest', function() {
     beforeEach(function(done) {
         setTimeout(function() {
             done();
-        }, 1000)
+        }, 1000);
     });
 
     it('should find the help intent', function() {
         alexa.handler(helpEvent, context);
-        assert(success == true, 'HelpIntent');
+        assert(success === true, 'HelpIntent');
     });
 
     it('should say that it did not understand the question', function(){
         alexa.handler(questionNotUnderstoodEvent, context);
-        assert(success == false, 'QuestionNotUnderstoodIntent');
+        assert(success === false, 'QuestionNotUnderstoodIntent');
     });
-})
+});

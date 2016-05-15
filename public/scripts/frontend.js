@@ -17,7 +17,7 @@ function onKeyPress(event) {
     if (isEnterKey(event)) {
         submitQuestion();
     }
-    return false
+    return false;
 }
 
 function isEnterKey(event) {

@@ -1,3 +1,5 @@
+"use strict";
+
 exports.Intent = function(data, classifier){
     var intent = require('./Intent').Intent(data['voldemort'], classifier, 'voldemort');
 
@@ -13,11 +15,11 @@ exports.Intent = function(data, classifier){
     var getInterpretation = function(data, callback) {
         data.interpretation = 'Did Lord Voldemort want to keep his return secret?';
         callback(null, data);
-    }
+    };
 
     intent.parse = parse;
     intent.doQuery = doQuery;
     intent.getInterpretation = getInterpretation;
 
     return intent;
-}
+};

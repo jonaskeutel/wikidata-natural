@@ -1,10 +1,12 @@
+"use strict";
+
 var assert = require('assert');
 var mapModule = require('./../app/wikidataQuery');
 
-describe('mapTest', function(){
-    it('should map every given sentence to the exact one intent it blongs to', function(){
+describe('mapTest', function() {
+    it('should map every given sentence to the exact one intent it blongs to', function() {
         mapModule.trainClassifier();
-        assert(mapModule.map('What is the biggest city in Italy with a female mayor?') == 0, 'mayorIntent');
+        assert(mapModule.map('What is the biggest city in Italy with a female mayor?') === 0, 'mayorIntent');
         assert(mapModule.map('When was Lionel Messi born?') == 1, 'birthdateIntent');
         assert(mapModule.map('Who is leading China?') == 2, 'leadingIntent');
         assert(mapModule.map('What is the population of India?') == 3, 'populationIntent');

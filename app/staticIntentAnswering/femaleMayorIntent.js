@@ -1,3 +1,5 @@
+"use strict";
+
 exports.Intent = function(data, classifier) {
     var intent = require('./Intent').Intent(data['femaleMayor'], classifier, 'femaleMayor');
     var parse = function(question) {
@@ -7,12 +9,12 @@ exports.Intent = function(data, classifier) {
             amount: number,
             searchText: country
         };
-    }
+    };
 
     function findAmount(question) {
         if (question.indexOf("is the") > -1 || question.indexOf('\'s the') > -1 || question.indexOf('the biggest city') > -1 )
-            return 1
-        var beforeNumberString = question.indexOf('biggest cities') > -1 ? question.indexOf('the') + 4 : question.indexOf('biggest') + 8
+            return 1;
+        var beforeNumberString = question.indexOf('biggest cities') > -1 ? question.indexOf('the') + 4 : question.indexOf('biggest') + 8;
         var afterNumberString = question.indexOf('biggest cities') > -1 ? question.indexOf('biggest') - 1 : question.indexOf('cities') - 1;
         var numberString = question.substring(beforeNumberString, afterNumberString);
         var amount;
@@ -32,27 +34,28 @@ exports.Intent = function(data, classifier) {
         end = end == -1 ? question.length : end;
         var country = question.substring(start, end);
         return country.charAt(0).toUpperCase() + country.slice(1);
-    };
+    }
 
     var doQuery = function(data, callback) {
         intent.client.get( intent.queryBuilder.femaleMayors(data.id, data.amount), function(queryData, response) {
             var jsonResponse = JSON.parse(intent.decoder.write(queryData));
-            if (jsonResponse.results.bindings.length == 0) {
+            if (jsonResponse.results.bindings.length === 0) {
                 data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
-                                "You would do me a big favor if you could look it up and add it to Wikidata."
+                                "You would do me a big favor if you could look it up and add it to Wikidata.";
                 callback(null, data);
                 return;
             }
 
             var resultArray = jsonResponse.results.bindings;
             data.result = resultArray;
+            var answer;
             if (data.amount == 1) {
                 answer = "The biggest city in " + data.searchText + " that is run by a female is " + resultArray[0].cityLabel.value;
             } else {
                 answer = "The " + data.amount + " biggest cities in " + data.label + " that are run by a female are ";
                 for (var i = 0; i < resultArray.length - 1; i++) {
                     answer += resultArray[i].cityLabel.value + ", ";
-                };
+                }
                 answer += "and " + resultArray[resultArray.length - 1].cityLabel.value + ".";
             }
 
@@ -71,11 +74,11 @@ exports.Intent = function(data, classifier) {
 
         data.interpretation = interpretation;
         callback(null, data);
-    }
+    };
 
     intent.parse = parse;
     intent.doQuery = doQuery;
     intent.getInterpretation = getInterpretation;
 
     return intent;
-}
+};

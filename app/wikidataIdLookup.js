@@ -1,31 +1,33 @@
+"use strict";
+
 var WikidataSearch = require('wikidata-search').WikidataSearch;
 var wikidataSearch = new WikidataSearch();
 
 var Client = require('node-rest-client').Client;
 var client = new Client();
-var dom = require('xmldom').DOMParser
-var xpath = require('xpath')
+var dom = require('xmldom').DOMParser;
+var xpath = require('xpath');
 
 exports.getWikidataId = function(data, callback) {
-    results = {}
+    var results = {};
 
     var checkFunction = function() {
-        if (results.hasOwnProperty('webpageId')
-            && results.hasOwnProperty('webpageLabel')
-            && results.hasOwnProperty('apiId')
-            && results.hasOwnProperty('apiLabel')) {
+        if (results.hasOwnProperty('webpageId') &&
+            results.hasOwnProperty('webpageLabel') &&
+            results.hasOwnProperty('apiId') &&
+            results.hasOwnProperty('apiLabel')) {
             // both queries are complete
-            if (results.apiId == null && results.webpageId == null) {
+            if (results.apiId === null && results.webpageId === null) {
                 callback('Sorry, didn’t find a Wikidata item matching ' + data.searchText + '!', null);
                 return;
             }
-            if (results.apiId == null) {
+            if (results.apiId === null) {
                 data.id = results.webpageId;
                 data.label = results.webpageLabel;
                 callback(null, data);
                 return;
             }
-            if (results.webpageId == null) {
+            if (results.webpageId === null) {
                 data.id = results.apiId;
                 data.label = results.apiLabel;
                 callback(null, data);
@@ -43,16 +45,16 @@ exports.getWikidataId = function(data, callback) {
                 return;
             }
         }
-    }
+    };
 
     getWikidataIdViaApi(data.searchText, results, checkFunction);
     getWikidataIdViaWebpage(data.searchText, results, checkFunction);
-}
+};
 
 function getWikidataIdViaApi(searchText, results, callback) {
     wikidataSearch.set('search', searchText);
     wikidataSearch.search(function(searchResult, error) {
-        if (searchResult.results.length == 0) {
+        if (searchResult.results.length === 0) {
             results.apiId = null;
             results.apiLabel = null;
         } else {
@@ -69,7 +71,7 @@ function getWikidataIdViaWebpage(searchText, results, callback) {
         var doc = new dom().parseFromString(htmlData.toString());
         var idDom = xpath.select("//span[@class='wb-itemlink-id'][1]/child::text()", doc);
         var labelDom = xpath.select("//span[@class='wb-itemlink-label'][1]/child::text()", doc);
-        if (idDom.length == 0) {
+        if (idDom.length === 0) {
             results.webpageId = null;
             results.webpageLabel = null;
             callback();

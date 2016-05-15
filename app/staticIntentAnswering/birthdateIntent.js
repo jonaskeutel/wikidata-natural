@@ -1,3 +1,5 @@
+"use strict";
+
 exports.Intent = function(data, classifier) {
     var intent = require('./Intent').Intent(data['birthdate'], classifier, 'birthdate');
 
@@ -6,10 +8,10 @@ exports.Intent = function(data, classifier) {
         if (question.indexOf('of') > -1 ) {
             searchText = question.substring(question.indexOf('of') + 3, question.length);
         } else if (question.indexOf('born') > -1 ) {
-            var start = question.indexOf('is') > -1 ? question.indexOf('is') + 3 : question.indexOf('was') + 4
+            var start = question.indexOf('is') > -1 ? question.indexOf('is') + 3 : question.indexOf('was') + 4;
             searchText = question.substring(start, question.indexOf('born') - 1 );
         }
-        searchTerms = searchText.split(' ');
+        var searchTerms = searchText.split(' ');
         for (var i = 0; i < searchTerms.length; i++) {
             searchTerms[i] = searchTerms[i].charAt(0).toUpperCase() + searchTerms[i].slice(1);
         }
@@ -22,9 +24,9 @@ exports.Intent = function(data, classifier) {
     var doQuery = function(data, callback) {
         intent.client.get( intent.queryBuilder.dateOfBirth(data.id), function(queryData, response) {
             var jsonResponse = JSON.parse(intent.decoder.write(queryData));
-            if (jsonResponse.results.bindings.length == 0) {
+            if (jsonResponse.results.bindings.length === 0) {
                 data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
-                                "You would do me a big favor if you could look it up and add it to Wikidata."
+                                "You would do me a big favor if you could look it up and add it to Wikidata.";
                 callback(null, data);
                 return;
             }
@@ -39,11 +41,11 @@ exports.Intent = function(data, classifier) {
     var getInterpretation = function(data, callback) {
         data.interpretation = "When was " + data.label + " born?";
         callback(null, data);
-    }
+    };
 
     intent.parse = parse;
     intent.doQuery = doQuery;
     intent.getInterpretation = getInterpretation;
 
     return intent;
-}
+};

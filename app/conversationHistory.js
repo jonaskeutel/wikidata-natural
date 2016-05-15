@@ -1,4 +1,6 @@
-var m_messages = []
+"use strict";
+
+var m_messages = [];
 
 var conversationHistory = {
     messages: function() {
@@ -32,6 +34,6 @@ var conversationHistory = {
     addProperty: function(property, id) {
         m_messages[id].property = property;
     }
-}
+};
 
-module.exports = conversationHistory
+module.exports = conversationHistory;

@@ -1,3 +1,5 @@
+"use strict";
+
 var wikidataIdLookup = require('./../wikidataIdLookup');
 
 exports.findNamedEntity = function(taggedWords, namedEntity, callback) {
@@ -7,8 +9,8 @@ exports.findNamedEntity = function(taggedWords, namedEntity, callback) {
     var prepositionMightBeInEntity = false;
 
     // at first, try to find NNP or NNPS ("Proper Noun"); if this wasn't successful, also try "NN" or "NNS" ("Noun")
-    for (i in tags) {
-        for (j in taggedWords) {
+    for (var i in tags) {
+        for (var j in taggedWords) {
             var taggedWord = taggedWords[j];
             var word = taggedWord[0];
             var tag = taggedWord[1];
@@ -19,11 +21,11 @@ exports.findNamedEntity = function(taggedWords, namedEntity, callback) {
                 }
                 namedEntityString += word + " ";
             }
-            if (namedEntityString != "" && tag == 'IN') {
+            if (namedEntityString !== "" && tag == 'IN') {
                 prepositionMightBeInEntity = true;
             }
         }
-        if (namedEntityString != "") {
+        if (namedEntityString !== "") {
             wikidataIdLookup.getWikidataId({searchText: namedEntityString.trim()}, function(err, data) {
                 if (err) {
                     namedEntity.id = null;
@@ -33,12 +35,12 @@ exports.findNamedEntity = function(taggedWords, namedEntity, callback) {
                     namedEntity.label = data.label;
                 }
                 callback();
-            })
+            });
             return;
         }
     }
 
-    if (namedEntityString == "") {
+    if (namedEntityString === "") {
         namedEntity.id = null;
         namedEntity.label = null;
         callback();

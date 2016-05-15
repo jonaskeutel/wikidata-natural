@@ -1,3 +1,5 @@
+"use strict";
+
 var querystring = require("querystring");
 
 var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel WHERE { " +

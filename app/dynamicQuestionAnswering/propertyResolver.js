@@ -1,3 +1,5 @@
+"use strict";
+
 var request = require('sync-request');
 var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
@@ -7,7 +9,7 @@ var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json
 
 exports.findPropertyId = function(taggedWords, property, callback) {
     var propertyString = findPropertyAsVerb(taggedWords);
-    if (propertyString == "") {
+    if (propertyString === "") {
         propertyString = findPropertyAsDescription(taggedWords);
     }
 
@@ -16,11 +18,11 @@ exports.findPropertyId = function(taggedWords, property, callback) {
     property = lookupPropertyViaApi(propertyString, property);
     callback();
     return;
-}
+};
 
 function findPropertyAsVerb(taggedWords) {
     var propertyString = "";
-    for (i in taggedWords) {
+    for (var i in taggedWords) {
         var taggedWord = taggedWords[i];
         var word = taggedWord[0];
         var tag = taggedWord[1];
@@ -37,9 +39,9 @@ function findPropertyAsVerb(taggedWords) {
 function findPropertyAsDescription(taggedWords) {
     // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
     var propertyString = "";
-    start = false;
+    var start = false;
 
-    for (i in taggedWords) {
+    for (var i in taggedWords) {
         var taggedWord = taggedWords[i];
         var word = taggedWord[0];
         var tag = taggedWord[1];

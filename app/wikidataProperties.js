@@ -1,3 +1,5 @@
+"use strict";
+
 var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
 var request = require('sync-request');
@@ -10,7 +12,7 @@ for (var i = 1; i < MAX_PROPERTY_NUMBER; i++) {
     var pId = "P" + i;
     var url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=" + pId;
     var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
-    if (queryData.entities[pId].missing == '') {
+    if (queryData.entities[pId].missing === '') {
         console.log("After P" + i + ", actual number of properties: ", properties.length);
         continue;
     }

@@ -1,3 +1,5 @@
+"use strict";
+
 var pos = require('pos');
 var lexer = new pos.Lexer();
 var tagger = new pos.Tagger();
@@ -15,14 +17,14 @@ var conversationHistory = require('./../conversationHistory.js');
 
 exports.answer = function(question, callback, fallback) {
     var questionId = conversationHistory.addQuestion(question);
-    var words = lexer.lex(question)
+    var words = lexer.lex(question);
     var taggedWords = tagger.tag(words);
 
     var property = {};
     var namedEntity = {};
 
     var checkFunction = function() {
-        if (Object.keys(property).length == 0 || Object.keys(namedEntity).length == 0) {
+        if (Object.keys(property).length === 0 || Object.keys(namedEntity).length === 0) {
             return;
         }
         // both queries are complete
@@ -48,9 +50,9 @@ exports.answer = function(question, callback, fallback) {
             data.interpretation = property.label + " of " + namedEntity.label + "?";
             conversationHistory.addInterpretation(data.interpretation, questionId);
             var jsonResponse = JSON.parse(decoder.write(queryData));
-            if (jsonResponse.results.bindings.length == 0) {
+            if (jsonResponse.results.bindings.length === 0) {
                 data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
-                                "You would do me a big favor if you could look it up and add it to Wikidata."
+                                "You would do me a big favor if you could look it up and add it to Wikidata.";
                 callback(data);
                 return;
             }
@@ -58,14 +60,17 @@ exports.answer = function(question, callback, fallback) {
             data.answer = property.label + " of " + namedEntity.label + " is " + data.result + ".";
             conversationHistory.addAnswer(data.answer, questionId);
             var answerIdPart = jsonResponse.results.bindings[0].object.value;
-            conversationHistory.addAnswerEntity({id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length), label: jsonResponse.results.bindings[0].objectLabel.value}, questionId)
+            conversationHistory.addAnswerEntity({id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'),
+                                                 answerIdPart.length),
+                                                 label: jsonResponse.results.bindings[0].objectLabel.value},
+                                                 questionId);
             callback(data);
         }).on('error', function (err) {
             console.log('something went wrong on the request', err.request.options);
             fallback();
         });
-    }
+    };
 
     entityResolver.findNamedEntity(taggedWords, namedEntity, checkFunction);
     propertyResolver.findPropertyId(taggedWords, property, checkFunction);
-}
+};

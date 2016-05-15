@@ -1,3 +1,5 @@
+"use strict";
+
 var dynamicQuestionAnswerer = require('./dynamicQuestionAnswering/dynamicQuestionAnswerer');
 var staticIntentAnswerer = require('./staticIntentAnswering/staticIntentAnswerer');
 
@@ -7,4 +9,4 @@ exports.answer = function(question, callback) {
     dynamicQuestionAnswerer.answer(question, callback, function(){
         staticIntentAnswerer.answer(question, callback);
     });
-}
+};

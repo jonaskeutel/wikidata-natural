@@ -36,21 +36,21 @@ var ALL_PREFIXES = "PREFIX wikibase: <http://wikiba.se/ontology#>" +
 
 
 exports.genercicSingleStatement = function(itemId, propertyId) {
-  var singleStatementQuery = GENERIC_SINGLE_STATEMENT.replace("[ITEM_ID]", itemId).replace("[PROPERTY_ID]", propertyId);
-	return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
+    var singleStatementQuery = GENERIC_SINGLE_STATEMENT.replace("[ITEM_ID]", itemId).replace("[PROPERTY_ID]", propertyId);
+    return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
 };
 
 exports.dateOfBirth = function(itemId) {
-      var dateOfBirthQuery = DATE_OF_BIRTH_QUERY.replace("[ITEM_ID]", itemId);
-	return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + dateOfBirthQuery});
+    var dateOfBirthQuery = DATE_OF_BIRTH_QUERY.replace("[ITEM_ID]", itemId);
+    return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + dateOfBirthQuery});
 };
 
 exports.femaleMayors = function(itemId, number) {
-      var mayorQuery = BIGGEST_CITIES_WITH_FEMALE_MAYOR_QUERY.replace("[ITEM_ID]", itemId).replace("[NUMBER]", number);
-      return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + mayorQuery});
+    var mayorQuery = BIGGEST_CITIES_WITH_FEMALE_MAYOR_QUERY.replace("[ITEM_ID]", itemId).replace("[NUMBER]", number);
+    return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + mayorQuery});
 };
 
 exports.whoIsLeading = function(itemId) {
-      var leadingQuery = WHO_IS_LEADING_QUERY.replace("[ITEM_ID]", itemId);
-      return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + leadingQuery});
+    var leadingQuery = WHO_IS_LEADING_QUERY.replace("[ITEM_ID]", itemId);
+    return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + leadingQuery});
 }

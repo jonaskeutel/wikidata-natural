@@ -15,6 +15,6 @@ var ALL_PREFIXES = "PREFIX wikibase: <http://wikiba.se/ontology#>" +
             "PREFIX v: <http://www.wikidata.org/prop/statement/> ";
 
 exports.genercicSingleStatement = function(itemId, propertyId) {
-  var singleStatementQuery = GENERIC_SINGLE_STATEMENT.replace("[ITEM_ID]", itemId).replace("[PROPERTY_ID]", propertyId);
-	return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
+    var singleStatementQuery = GENERIC_SINGLE_STATEMENT.replace("[ITEM_ID]", itemId).replace("[PROPERTY_ID]", propertyId);
+    return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
 };

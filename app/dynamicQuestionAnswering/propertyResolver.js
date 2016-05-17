@@ -11,7 +11,9 @@ exports.findPropertyId = function(taggedWords) {
     property = findPropertyAsDescription(taggedWords);
   }
   console.log("We found as the property you are looking for: ", property);
-  propertyId = lookupPropertyIdViaApi(property);
+  var interrogatives = findInterrogatives(taggedWords);
+  var context = mapInterrogatives(interrogatives, property)
+  propertyId = lookupPropertyIdViaApi(property, context);
   return propertyId;
 }
 
@@ -29,7 +31,6 @@ function findPropertyAsVerb(taggedWords) {
   property = property.toLowerCase().replace(/is|are|was|were|been/g, '');
   return property.trim();
 }
-
 
 function findPropertyAsDescription(taggedWords) {
   // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
@@ -53,6 +54,35 @@ function findPropertyAsDescription(taggedWords) {
   }
   return property.trim();
 }
+
+function findInterrogatives(taggedWords) {
+  var interrogatives = [];
+  for (i in taggedWords) {
+      var taggedWord = taggedWords[i];
+      var word = taggedWord[0];
+      var tag = taggedWord[1];
+      if (tag.startsWith('W')) {
+        interrogatives.push(word.toLowerCase());
+      }
+  }
+  return interrogatives;
+}
+
+function mapInterrogatives(interrogatives, property) {
+  var context = [];
+  if (interrogatives.indexOf('where') > -1) { 
+    context.push('place');
+    context.push('location');
+  } else if (interrogatives.indexOf('when') > -1) {
+    context.push('date');
+    context.push('time');
+  } else if (interrogatives.indexOf('who') > -1) {
+    context.push('person');
+    context.push(property.stem() + 'er');
+  }
+  return context;
+}
+
 
 // returns propertyId that fits best, if there is no good fit: returns false
 function lookupPropertyIdInJsonFile(property) {
@@ -81,12 +111,51 @@ function lookupPropertyIdInJsonFile(property) {
 }
 
 // returns propertyId that fits best, if there is no good fit: returns false
-function lookupPropertyIdViaApi(property) {
+function lookupPropertyIdViaApi(property, context) {
   var propertyId = false;
   var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + property;
   var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
   if(queryData.search[0]) {
-    propertyId = queryData.search[0].id;
+    var resultlength = queryData.search.length;
+    var contextlength = context.length;
+    if (contextlength > 0) {
+      var propertyFound = false; 
+      for (var i = 0; i < resultlength; i++) {
+        for (var j = 0; j < contextlength; j++ ) {
+          if (queryData.search[i].label.toLowerCase().indexOf(context[j]) > -1 ) {
+            propertyId = queryData.search[i].id;
+            propertyFound = true; 
+            break; 
+          } else if (queryData.search[i].description.toLowerCase().indexOf(context[j]) > -1 && queryData.search[i].description.toLowerCase().indexOf(context[j]) < context[j].length) {
+            propertyId = queryData.search[i].id;
+            propertyFound = true; 
+            break; 
+          }
+          // iterate aliases
+          if (queryData.search[i].aliases != undefined) {
+            var numberOfAliases = queryData.search[i].aliases.length
+            for (var a = 0; a < numberOfAliases; a++) {
+              if (queryData.search[i].aliases[a].toLowerCase().indexOf(context[j]) > -1) {
+                propertyId = queryData.search[i].id;
+                propertyFound = true; 
+                break; 
+              }
+            }
+          }
+          if (propertyFound == true) {
+            break;
+          }
+        }
+        if (propertyFound == true) {
+          break;
+        }
+      }
+      if (!propertyId) {
+        propertyId = queryData.search[0].id
+      }
+    } else {
+      propertyId = queryData.search[0].id
+    }
   }
   return propertyId;
 }

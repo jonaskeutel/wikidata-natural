@@ -15,7 +15,7 @@ exports.findPropertyId = function(taggedWords, property, callback) {
 
     console.log("We found as the property you are looking for: ", propertyString);
     var interrogatives = findInterrogatives(taggedWords);
-    var context = mapInterrogatives(interrogatives, property);
+    var context = mapInterrogatives(interrogatives, propertyString);
     property = lookupPropertyViaApi(propertyString, property, context);
     callback();
     return;
@@ -61,7 +61,7 @@ function findPropertyAsDescription(taggedWords) {
 
 function findInterrogatives(taggedWords) {
   var interrogatives = [];
-  for (i in taggedWords) {
+  for (var i in taggedWords) {
       var taggedWord = taggedWords[i];
       var word = taggedWord[0];
       var tag = taggedWord[1];
@@ -72,7 +72,7 @@ function findInterrogatives(taggedWords) {
   return interrogatives;
 }
 
-function mapInterrogatives(interrogatives, property) {
+function mapInterrogatives(interrogatives, propertyString) {
   var context = [];
   if (interrogatives.indexOf('where') > -1) {
     context.push('place');
@@ -82,7 +82,7 @@ function mapInterrogatives(interrogatives, property) {
     context.push('time');
   } else if (interrogatives.indexOf('who') > -1) {
     context.push('person');
-    context.push(property.stem() + 'er');
+    context.push(propertyString.stem() + 'er');
   }
   return context;
 }

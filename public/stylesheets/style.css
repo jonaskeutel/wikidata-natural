@@ -1,70 +1,70 @@
 * {
-	font-size: 15pt;
-	font-family: "Open Sans", sans-serif;
+    font-size: 15pt;
+    font-family: "Open Sans", sans-serif;
 }
 
 html {
-	background: #eee;
+    background: #eee;
 }
 
 body {
-	margin: 1em auto;
-	max-width: 40em;
-	width: calc(100vw - 5em);
-	border: 1px solid #1A864F;
-	padding: 0.5em;
-	background: linear-gradient(#1A864F, rgba(26,134,79,0.4) 15% );
-	box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
+    margin: 1em auto;
+    max-width: 40em;
+    width: calc(100vw - 5em);
+    border: 1px solid #1A864F;
+    padding: 0.5em;
+    background: linear-gradient(#1A864F, rgba(26,134,79,0.4) 15% );
+    box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
 }
 
 h1 {
-	line-height: 1em;
-	padding: 0;
-	margin: 0 0 0.6em 0;
-	font-weight: 600;
-	color: white;
+    line-height: 1em;
+    padding: 0;
+    margin: 0 0 0.6em 0;
+    font-weight: 600;
+    color: white;
 }
 
 #conversation {
-	width: calc(100% - 2px);
-	border: 1px solid #1A864F;
-	height: calc(100vh - 11em);
-	max-height: 30em;
-	background: #fbfbfb;
-	overflow: auto;
+    width: calc(100% - 2px);
+    border: 1px solid #1A864F;
+    height: calc(100vh - 11em);
+    max-height: 30em;
+    background: #fbfbfb;
+    overflow: auto;
 }
 
 .question {
-	display: block;
-	padding: 0.4em 0.8em 0 0.8em;
-	margin: 0;
+    display: block;
+    padding: 0.4em 0.8em 0 0.8em;
+    margin: 0;
 }
 
 .interpretation {
-	font-size: 60%;
-	margin-left: 3em;
-	margin-bottom: 0.5em;
+    font-size: 60%;
+    margin-left: 3em;
+    margin-bottom: 0.5em;
 }
 
 .answer {
-	padding: 0.4em 0.8em;
-	border-radius: 0.1em;
-	border: 1px solid;
-	margin: 0 0.5em 1em 2em;
-	background: linear-gradient(rgba(26,134,79,0), rgba(26,134,79,0.06))!important;
-	border-color: rgba(26,134,79,0.4)!important;
-	color: rgb(0,2,91);
+    padding: 0.4em 0.8em;
+    border-radius: 0.1em;
+    border: 1px solid;
+    margin: 0 0.5em 1em 2em;
+    background: linear-gradient(rgba(26,134,79,0), rgba(26,134,79,0.06))!important;
+    border-color: rgba(26,134,79,0.4)!important;
+    color: rgb(0,2,91);
 }
 
 input {
-	width: calc(100% - 2px - 0.8em);
-	padding: 0.3em 0.4em 0.4em 0.4em;
-	margin-top: 0.5em;
-	border: 1px solid #1A864F;
+    width: calc(100% - 2px - 0.8em);
+    padding: 0.3em 0.4em 0.4em 0.4em;
+    margin-top: 0.5em;
+    border: 1px solid #1A864F;
 }
 
 .submitHidden {
-	position: absolute; left: -9999px;
-	width: 1px;
-	height: 1px;
+    position: absolute; left: -9999px;
+    width: 1px;
+    height: 1px;
 }

@@ -1,3 +1,5 @@
+"use strict";
+
 var request = require('sync-request');
 var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
@@ -5,54 +7,56 @@ var stringSimilarity = require('string-similarity');
 var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json');
 
 
-exports.findPropertyId = function(taggedWords) {
-  var property = findPropertyAsVerb(taggedWords);
-  if (property == "") {
-    property = findPropertyAsDescription(taggedWords);
-  }
-  console.log("We found as the property you are looking for: ", property);
-  var interrogatives = findInterrogatives(taggedWords);
-  var context = mapInterrogatives(interrogatives, property)
-  propertyId = lookupPropertyIdViaApi(property, context);
-  return propertyId;
-}
+exports.findPropertyId = function(taggedWords, property, callback) {
+    var propertyString = findPropertyAsVerb(taggedWords);
+    if (propertyString === "") {
+        propertyString = findPropertyAsDescription(taggedWords);
+    }
+
+    console.log("We found as the property you are looking for: ", propertyString);
+    var interrogatives = findInterrogatives(taggedWords);
+    var context = mapInterrogatives(interrogatives, property);
+    property = lookupPropertyViaApi(propertyString, property, context);
+    callback();
+    return;
+};
 
 function findPropertyAsVerb(taggedWords) {
-  var property = "";
-  for (i in taggedWords) {
-      var taggedWord = taggedWords[i];
-      var word = taggedWord[0];
-      var tag = taggedWord[1];
-      if (tag.startsWith('V')) {
-        property += word + " ";
-      }
-  }
+    var propertyString = "";
+    for (var i in taggedWords) {
+        var taggedWord = taggedWords[i];
+        var word = taggedWord[0];
+        var tag = taggedWord[1];
+        if (tag.startsWith('V')) {
+            propertyString += word + " ";
+        }
+    }
 
-  property = property.toLowerCase().replace(/is|are|was|were|been/g, '');
-  return property.trim();
+    propertyString = propertyString.toLowerCase().replace(/is|are|was|were|been/g, '');
+    return propertyString.trim();
 }
 
 function findPropertyAsDescription(taggedWords) {
-  // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
-  var property = "";
-  start = false;
+    // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
+    var propertyString = "";
+    var start = false;
 
-  for (i in taggedWords) {
-      var taggedWord = taggedWords[i];
-      var word = taggedWord[0];
-      var tag = taggedWord[1];
-      if (start) {
-        if (tag == 'IN') {
-          break;
+    for (var i in taggedWords) {
+        var taggedWord = taggedWords[i];
+        var word = taggedWord[0];
+        var tag = taggedWord[1];
+        if (start) {
+            if (tag == 'IN') {
+                break;
+            }
+            propertyString += word + " ";
         }
-        property += word + " ";
-      }
 
-      if (tag == 'DT') {
-        start = true;
-      }
-  }
-  return property.trim();
+        if (tag == 'DT') {
+            start = true;
+        }
+    }
+    return propertyString.trim();
 }
 
 function findInterrogatives(taggedWords) {
@@ -70,7 +74,7 @@ function findInterrogatives(taggedWords) {
 
 function mapInterrogatives(interrogatives, property) {
   var context = [];
-  if (interrogatives.indexOf('where') > -1) { 
+  if (interrogatives.indexOf('where') > -1) {
     context.push('place');
     context.push('location');
   } else if (interrogatives.indexOf('when') > -1) {
@@ -86,76 +90,83 @@ function mapInterrogatives(interrogatives, property) {
 
 // returns propertyId that fits best, if there is no good fit: returns false
 function lookupPropertyIdInJsonFile(property) {
-  var SIMILARITY_THRESHOLD = 0.6;
-  // var possibleIds = []; // --> maybe we should return an array of possible ids so that we can decide later which fits best regarding the discourse
+    var SIMILARITY_THRESHOLD = 0.6;
+    // var possibleIds = []; // --> maybe we should return an array of possible ids so that we can decide later which fits best regarding the discourse
 
-  var propertyId = false;
-  var maxRating = 0;
-  for (var i = 0; i < propertiesWithSynonyms.length; i++) {
-    var allPossibleNames = propertiesWithSynonyms[i].aliases;
-    allPossibleNames.push(propertiesWithSynonyms[i].label);
-    var bestMatch = stringSimilarity.findBestMatch(property, allPossibleNames);
-    var bestRating = bestMatch.bestMatch.rating; // --> problem: 'cash' is more similar to 'cast' than 'cast member'...
-    if (bestRating > SIMILARITY_THRESHOLD) {
-      // possibleIds.push({'id': propertiesWithSynonyms[i].id, 'rating': bestRating > 0.6})
-      if (bestRating > maxRating) {
-        maxRating = bestRating;
-        propertyId = propertiesWithSynonyms[i].id;
-      }
+    var propertyId = false;
+    var maxRating = 0;
+    for (var i = 0; i < propertiesWithSynonyms.length; i++) {
+        var allPossibleNames = propertiesWithSynonyms[i].aliases;
+        allPossibleNames.push(propertiesWithSynonyms[i].label);
+        var bestMatch = stringSimilarity.findBestMatch(propertyString, allPossibleNames);
+        var bestRating = bestMatch.bestMatch.rating; // --> problem: 'cash' is more similar to 'cast' than 'cast member'...
+        if (bestRating > SIMILARITY_THRESHOLD) {
+            // possibleIds.push({'id': propertiesWithSynonyms[i].id, 'rating': bestRating > 0.6})
+            if (bestRating > maxRating) {
+                maxRating = bestRating;
+                propertyId = propertiesWithSynonyms[i].id;
+            }
+        }
+        if (bestRating == 1) {
+            return propertyId;
+        }
     }
-    if (bestRating == 1) {
-      return propertyId;
-    }
-  }
-  return propertyId;
+    return propertyId;
 }
 
 // returns propertyId that fits best, if there is no good fit: returns false
-function lookupPropertyIdViaApi(property, context) {
-  var propertyId = false;
-  var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + property;
-  var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
-  if(queryData.search[0]) {
-    var resultlength = queryData.search.length;
-    var contextlength = context.length;
-    if (contextlength > 0) {
-      var propertyFound = false; 
-      for (var i = 0; i < resultlength; i++) {
-        for (var j = 0; j < contextlength; j++ ) {
-          if (queryData.search[i].label.toLowerCase().indexOf(context[j]) > -1 ) {
-            propertyId = queryData.search[i].id;
-            propertyFound = true; 
-            break; 
-          } else if (queryData.search[i].description.toLowerCase().indexOf(context[j]) > -1 && queryData.search[i].description.toLowerCase().indexOf(context[j]) < context[j].length) {
-            propertyId = queryData.search[i].id;
-            propertyFound = true; 
-            break; 
-          }
-          // iterate aliases
-          if (queryData.search[i].aliases != undefined) {
-            var numberOfAliases = queryData.search[i].aliases.length
-            for (var a = 0; a < numberOfAliases; a++) {
-              if (queryData.search[i].aliases[a].toLowerCase().indexOf(context[j]) > -1) {
-                propertyId = queryData.search[i].id;
-                propertyFound = true; 
-                break; 
+function lookupPropertyViaApi(propertyString, property, context) {
+    var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + propertyString;
+    var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
+    if (queryData.search[0]) {
+      var resultlength = queryData.search.length;
+      var contextlength = context.length;
+      if (contextlength > 0) {
+        var propertyFound = false;
+        for (var i = 0; i < resultlength; i++) {
+          for (var j = 0; j < contextlength; j++ ) {
+            if (queryData.search[i].label.toLowerCase().indexOf(context[j]) > -1 ) {
+              property.id = queryData.search[i].id;
+              property.label = queryData.search[i].label;
+              propertyFound = true;
+              break;
+            } else if (queryData.search[i].description.toLowerCase().indexOf(context[j]) > -1 && queryData.search[i].description.toLowerCase().indexOf(context[j]) < context[j].length) {
+              property.id = queryData.search[i].id;
+              property.label = queryData.search[i].label;
+              propertyFound = true;
+              break;
+            }
+            // iterate aliases
+            if (queryData.search[i].aliases != undefined) {
+              var numberOfAliases = queryData.search[i].aliases.length
+              for (var a = 0; a < numberOfAliases; a++) {
+                if (queryData.search[i].aliases[a].toLowerCase().indexOf(context[j]) > -1) {
+                  property.id = queryData.search[i].id;
+                  property.label = queryData.search[i].label;
+                  propertyFound = true;
+                  break;
+                }
               }
+            }
+            if (propertyFound == true) {
+              break;
             }
           }
           if (propertyFound == true) {
             break;
           }
         }
-        if (propertyFound == true) {
-          break;
+        if (!propertyFound) {
+          property.id = queryData.search[0].id;
+          property.label = queryData.search[0].label;
         }
-      }
-      if (!propertyId) {
-        propertyId = queryData.search[0].id
+      } else {
+        property.id = queryData.search[0].id;
+        property.label = queryData.search[0].label;
       }
     } else {
-      propertyId = queryData.search[0].id
+        property.id = null;
+        property.label = null;
     }
-  }
-  return propertyId;
+    return property;
 }

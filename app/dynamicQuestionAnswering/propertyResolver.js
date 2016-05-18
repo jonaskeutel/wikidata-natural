@@ -5,8 +5,6 @@ var StringDecoder = require('string_decoder').StringDecoder;
 var decoder = new StringDecoder('utf8');
 var stringSimilarity = require('string-similarity');
 var conversationHistory = require('./../conversationHistory.js');
-var propertiesWithSynonyms = require('./../../public/propertiesWithSynonyms.json');
-
 
 exports.findPropertyId = function(taggedWords, questionId, callback) {
     var propertyString = findPropertyAsVerb(taggedWords);

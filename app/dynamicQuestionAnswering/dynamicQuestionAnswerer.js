@@ -13,7 +13,8 @@ var decoder = new StringDecoder('utf8');
 
 var entityResolver = require('./entityResolver');
 var propertyResolver = require('./propertyResolver');
-var conversationHistory = require('./../conversationHistory.js');
+var conversationHistory = require('./../conversationHistory');
+var answerFormatter = require('./answerFormatter');
 
 exports.answer = function(question, callback, fallback) {
     var questionId = conversationHistory.addQuestion(question);
@@ -76,7 +77,7 @@ exports.answer = function(question, callback, fallback) {
             var queryResult = jsonResponse.results.bindings[0];
 
             data.result = queryResult.objectLabel.value;
-            data.answer = property.label + " of " + namedEntity.label + " is " + data.result + ".";
+            data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
             var answerIdPart = queryResult.object.value;
             var answerEntity = {

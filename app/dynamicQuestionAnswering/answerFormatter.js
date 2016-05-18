@@ -50,8 +50,6 @@ function formatDate(dateLiteral) {
     	return dateLiteral;
     }
 
-    var oneDay = 24*60*60*1000;
-
     return weekdays[d.getDay()] + ", " + d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear() + timeSpanSince(d);
 }
 

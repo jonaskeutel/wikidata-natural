@@ -33,6 +33,10 @@ var conversationHistory = {
     // property is object with keys 'id' and 'label'
     addProperty: function(property, id) {
         m_messages[id].property = property;
+    },
+
+    isEmpty: function() {
+        return m_messages.length === 0;
     }
 };
 

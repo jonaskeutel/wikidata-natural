@@ -97,19 +97,18 @@ function formatDecimal(decimalLiteral) {
 	var suffix = "";
 	if (num % 1000000000 === 0) {
 		num /= 1000000000;
-		suffix += " billion";
+		suffix = " billion";
 	} else if (num % 1000000 === 0) {
 		num /= 1000000;
-		suffix += " million";
+		suffix = " million";
 	}
 	var str = num.toString();
 	var leftOfDecimalPoint = str.split('.')[0].split("");
 	var rightOfDecimalPoint = str.split('.')[1];
-	leftOfDecimalPoint = leftOfDecimalPoint;
 	var formatted = "";
 	for (var i = leftOfDecimalPoint.length - 1; i >= 0; i--) {
 		formatted = leftOfDecimalPoint[i] + formatted;
-		if ( (leftOfDecimalPoint.length - i) % 3 === 0 && isNumeric(leftOfDecimalPoint[i - 1])) {
+		if ((leftOfDecimalPoint.length - i) % 3 === 0 && isNumeric(leftOfDecimalPoint[i - 1])) {
 			formatted = " " + formatted;
 		}
 	}
@@ -117,6 +116,7 @@ function formatDecimal(decimalLiteral) {
 		formatted += '.';
 		formatted += rightOfDecimalPoint;
 	}
+	formatted += suffix;
 
 	return formatted;
 }

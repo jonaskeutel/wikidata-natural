@@ -103,7 +103,7 @@ function formatDecimal(decimalLiteral) {
 		suffix = " million";
 	}
 	var str = num.toString();
-	var leftOfDecimalPoint = str.split('.')[0].split("");
+	var leftOfDecimalPoint = str.split('.')[0];
 	var rightOfDecimalPoint = str.split('.')[1];
 	var formatted = "";
 	for (var i = leftOfDecimalPoint.length - 1; i >= 0; i--) {

@@ -1,5 +1,6 @@
 {
     "node": true,
     "unused": false,
-    "sub": true
+    "sub": true,
+    "-W100": true
 }

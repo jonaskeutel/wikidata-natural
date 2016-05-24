@@ -12,7 +12,7 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
         propertyString = findPropertyAsDescription(taggedWords);
     }
 
-    console.log("We found as the property you are looking for: ", propertyString);
+    console.log("Extracted Property:", propertyString);
 
     var interrogatives = findInterrogatives(taggedWords);
     var context = mapInterrogatives(interrogatives, propertyString);
@@ -23,6 +23,7 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     if (!property.id) {
         callback("Could not find Property");
     }
+    console.log("Property lookup returned", property.id, "-", property.label);
     callback(null, property);
 };
 

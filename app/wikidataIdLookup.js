@@ -58,8 +58,9 @@ function getWikidataIdViaApi(searchText, results, callback) {
             results.apiId = null;
             results.apiLabel = null;
         } else {
-            results.apiId = searchResult.results[0].id;
             results.apiLabel = searchResult.results[0].label;
+            results.apiId = searchResult.results[0].id;
+            console.log("ID lookup via API returned", results.apiId, "-", results.apiLabel);
         }
         callback();
     });
@@ -79,6 +80,7 @@ function getWikidataIdViaWebpage(searchText, results, callback) {
         }
         results.webpageId = idDom[0].nodeValue.substring(1, idDom[0].nodeValue.length-1);
         results.webpageLabel = labelDom[0].nodeValue;
+        console.log("ID lookup via DOM returned", results.webpageId, "-", results.webpageLabel);
         callback();
     });
 }

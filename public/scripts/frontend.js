@@ -11,6 +11,7 @@ function initialize() {
     form.parentNode.appendChild(inputField);
     form.parentNode.removeChild(form);
     document.getElementById("conversation").scrollTop = 100000000;
+    triangleBackground();
 }
 
 function onKeyPress(event) {
@@ -55,4 +56,14 @@ function submitApi(questionText) {
 function displayInterpretationAndAnswer(result) {
     displayMessage(result.interpretation, "interpretation");
     displayMessage(result.answer, "answer");
+}
+
+function triangleBackground() {
+    var pattern = Trianglify({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        stroke_width: 0.7,
+        x_colors: 'PRGn'
+    });
+    document.body.appendChild(pattern.svg());
 }

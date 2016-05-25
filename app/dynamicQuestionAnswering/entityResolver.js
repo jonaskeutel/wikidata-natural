@@ -11,6 +11,7 @@ exports.findNamedEntity = function(taggedWords, questionId, callback) {
         returnHistoryEntityInstead(callback, questionId);
         return;
     }
+    console.log("Extracted Named Entity:", namedEntityString.trim());
 
     wikidataIdLookup.getWikidataId({searchText: namedEntityString.trim()}, function(err, data) {
         if (err) {
@@ -56,6 +57,9 @@ function extractNamedEntityString(taggedWords) {
             if (namedEntityString !== "" && tag == 'IN') {
                 prepositionMightBeInEntity = true;
             }
+        }
+        if (namedEntityString !== "") {
+            break;
         }
     }
     return namedEntityString;

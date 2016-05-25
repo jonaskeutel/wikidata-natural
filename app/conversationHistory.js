@@ -37,6 +37,10 @@ var conversationHistory = {
 
     isEmpty: function() {
         return m_messages.length === 0;
+    },
+
+    wasEmpty: function() {
+        return m_messages.length == 1;
     }
 };
 

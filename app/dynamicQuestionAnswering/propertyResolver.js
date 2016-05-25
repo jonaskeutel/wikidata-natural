@@ -12,17 +12,18 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
         propertyString = findPropertyAsDescription(taggedWords);
     }
 
-    console.log("We found as the property you are looking for: ", propertyString);
+    console.log("Extracted Property:", propertyString);
 
     var interrogatives = findInterrogatives(taggedWords);
     var context = mapInterrogatives(interrogatives, propertyString);
     var property = lookupPropertyViaApi(propertyString, context);
-    if ((!property.id) && !conversationHistory.isEmpty()) {
+    if (!property.id && !conversationHistory.wasEmpty()) {
         property = conversationHistory.messages()[questionId - 1].property;
     }
     if (!property.id) {
         callback("Could not find Property");
     }
+    console.log("Property lookup returned", property.id, "-", property.label);
     callback(null, property);
 };
 
@@ -94,11 +95,10 @@ function mapInterrogatives(interrogatives, propertyString) {
 
 // returns propertyId that fits best, if there is no good fit: returns false
 function lookupPropertyViaApi(propertyString, context) {
-    var property = {};
     var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + propertyString;
     var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
     if (!queryData || !queryData.search[0]) {
-        return null;
+        return {};
     }
 
     var properties = queryData.search;

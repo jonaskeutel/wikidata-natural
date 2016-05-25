@@ -15,7 +15,7 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     console.log("Extracted Property:", propertyString);
 
     var interrogatives = findInterrogatives(taggedWords);
-    var context = mapInterrogatives(interrogatives, propertyString);
+    var context = mapInterrogatives(interrogatives, taggedWords);
     var property = lookupPropertyViaApi(propertyString, context);
     if (!property.id && !conversationHistory.wasEmpty()) {
         property = conversationHistory.messages()[questionId - 1].property;
@@ -31,8 +31,8 @@ function findPropertyAsVerb(taggedWords) {
     var propertyString = "";
     for (var i in taggedWords) {
         var taggedWord = taggedWords[i];
-        var word = taggedWord[0];
-        var tag = taggedWord[1];
+        var word = taggedWord.orth;
+        var tag = taggedWord.tag;
         if (tag.startsWith('V')) {
             propertyString += word + " ";
         }
@@ -49,8 +49,8 @@ function findPropertyAsDescription(taggedWords) {
 
     for (var i in taggedWords) {
         var taggedWord = taggedWords[i];
-        var word = taggedWord[0];
-        var tag = taggedWord[1];
+        var word = taggedWord.orth;
+        var tag = taggedWord.tag;
         if (start) {
             if (tag == 'IN') {
                 break;
@@ -69,8 +69,8 @@ function findInterrogatives(taggedWords) {
     var interrogatives = [];
     for (var i in taggedWords) {
         var taggedWord = taggedWords[i];
-        var word = taggedWord[0];
-        var tag = taggedWord[1];
+        var word = taggedWord.orth;
+        var tag = taggedWord.tag;
         if (tag.startsWith('W')) {
             interrogatives.push(word.toLowerCase());
         }
@@ -78,7 +78,7 @@ function findInterrogatives(taggedWords) {
     return interrogatives;
 }
 
-function mapInterrogatives(interrogatives, propertyString) {
+function mapInterrogatives(interrogatives, taggedWords) {
     var context = [];
     if (interrogatives.indexOf('where') > -1) {
         context.push('place');
@@ -87,8 +87,13 @@ function mapInterrogatives(interrogatives, propertyString) {
         context.push('date');
         context.push('time');
     } else if (interrogatives.indexOf('who') > -1) {
-        context.push('person');
-        context.push(propertyString.stem() + 'er');
+        for (var i in taggedWords) {
+            var taggedWord = taggedWords[i];
+            var tag = taggedWord.tag;
+            if (tag.startsWith('V')) {
+                context.push(taggedWord.lemma + 'er');
+            }
+        }
     }
     return context;
 }

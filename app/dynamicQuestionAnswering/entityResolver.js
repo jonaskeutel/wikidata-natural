@@ -45,8 +45,8 @@ function extractNamedEntityString(taggedWords) {
     for (var i in tags) {
         for (var j in taggedWords) {
             var taggedWord = taggedWords[j];
-            var word = taggedWord[0];
-            var tag = taggedWord[1];
+            var word = taggedWord.orth;
+            var tag = taggedWord.tag;
             if (tag.startsWith(tags[i])) {
                 if (prepositionMightBeInEntity) {
                     namedEntityString = "";

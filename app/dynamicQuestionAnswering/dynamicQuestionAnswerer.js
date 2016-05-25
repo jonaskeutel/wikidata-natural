@@ -1,9 +1,5 @@
 "use strict";
 
-var pos = require('pos');
-var lexer = new pos.Lexer();
-var tagger = new pos.Tagger();
-
 var spacyClient = require('./spacyClient');
 
 var wikidataIdLookup = require('./../wikidataIdLookup');
@@ -20,17 +16,13 @@ var answerFormatter = require('./answerFormatter');
 
 exports.answer = function(question, callback, fallback) {
     var questionId = conversationHistory.addQuestion(question);
-    var words = lexer.lex(question);
-    var taggedWords = tagger.tag(words);
-
-    spacyClient.getSpacyTaggedWords(question, function(spacyTaggedWords) {});
-
     var property = null;
     var namedEntity = null;
 
-    entityResolver.findNamedEntity(taggedWords, questionId, onEntityFound);
-    propertyResolver.findPropertyId(taggedWords, questionId, onPropertyFound);
-
+    spacyClient.getSpacyTaggedWords(question, function(spacyTaggedWords) {
+        entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityFound);
+        propertyResolver.findPropertyId(spacyTaggedWords, questionId, onPropertyFound);
+    });
 
     function onEntityFound(err, foundEntity) {
         /* TODO error handling */

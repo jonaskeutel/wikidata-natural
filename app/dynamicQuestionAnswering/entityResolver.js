@@ -5,7 +5,7 @@ var conversationHistory = require('./../conversationHistory.js');
 
 
 exports.findNamedEntity = function(taggedWords, questionId, callback) {
-    var namedEntityString = extractNamedEntityString(taggedWords);
+    var namedEntityString = extractNamedEntityStringViaSpacy(taggedWords);
 
     if (namedEntityString === "") {
         returnHistoryEntityInstead(callback, questionId);
@@ -33,6 +33,16 @@ function returnHistoryEntityInstead(callback, questionId) {
     callback(null, namedEntity);
 }
 
+function extractNamedEntityStringViaSpacy(taggedWords) {
+    console.log(taggedWords);
+    var namedEntityString = "";
+    for (var i = 0; i < taggedWords.length; i++) {
+        if (taggedWords[i].entType != '') {
+            namedEntityString += taggedWords[i].orth + " ";
+        }
+    }
+    return namedEntityString.trim();
+}
 
 function extractNamedEntityString(taggedWords) {
     var tags = ["NNP", "NN"];

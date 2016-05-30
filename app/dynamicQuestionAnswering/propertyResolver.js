@@ -7,10 +7,11 @@ var stringSimilarity = require('string-similarity');
 var conversationHistory = require('./../conversationHistory.js');
 
 exports.findPropertyId = function(taggedWords, questionId, callback) {
-    var propertyString = findPropertyAsVerb(taggedWords);
-    if (propertyString === "") {
-        propertyString = findPropertyAsDescription(taggedWords);
-    }
+    // var propertyString = findPropertyAsVerb(taggedWords);
+    // if (propertyString === "") {
+    //     propertyString = findPropertyAsDescription(taggedWords);
+    // }
+    var propertyString = findPropertyWithSpacy(taggedWords);
 
     console.log("Extracted Property:", propertyString);
 
@@ -26,6 +27,51 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     console.log("Property lookup returned", property.id, "-", property.label);
     callback(null, property);
 };
+
+function findPropertyWithSpacy(taggedWords) {
+    var propertyString = "";
+    var rootIndex = findRootIndex(taggedWords);
+    //  property-as-description-part:
+    // assuming, only one children-path yields to namedEntity
+    var element = taggedWords[rootIndex];
+    var blacklist = ['punct']
+
+    if(element.tag.startsWith('V') && element.lemma != 'be') {
+        propertyString += element.orth + " ";
+    }
+    while (true) {
+        for (var i = 0; i < element.depChildren.length; i++) {
+            console.log("trying to follow " + element.orth + " via " + element.depChildren[i]);
+            if(blacklist.indexOf(element.depChildren[i].depType) != -1 || element.depChildren[i].tag.startsWith("W")) {
+                continue;
+            }
+
+            element = taggedWords[element.depChildren[i].pos];
+            if (element.entType === "" && element.lemma != 'be') {
+                propertyString += element.orth + " ";
+                i = 0;
+                console.log("appended: " + element.orth + "; propertyString is now: " + propertyString);
+            } else {
+                break;
+            }
+            continue;
+        }
+        break;
+    }
+    propertyString = propertyString.trim();
+    if (propertyString.endsWith(" of")) {
+        propertyString = propertyString.substring(0, propertyString.length - 3)
+    }
+    return propertyString;
+}
+
+function findRootIndex(taggedWords) {
+    for (var i = 0; i < taggedWords.length; i++) {
+        if (taggedWords[i].depType === 'ROOT') {
+            return i;
+        }
+    }
+}
 
 function findPropertyAsVerb(taggedWords) {
     var propertyString = "";

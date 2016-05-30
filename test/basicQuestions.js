@@ -70,6 +70,15 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for what is xyz\' population question', function(done) {
+
+        app.answer('What is the Germany\'s population? ', function(answer) {
+            assert.equal(answer.interpretation, 'population of Germany?');
+            assert.equal(answer.result, '81292400');
+            done();
+        });
+    });
+
 
     it('returns correct answer for who is president question', function(done) {
 
@@ -83,6 +92,15 @@ describe('basicQuestions', function() {
     it('returns correct answer for who is head of government question', function(done) {
 
         app.answer('Who is the head of government of Germany? ', function(answer) {
+            assert.equal(answer.interpretation, 'head of government of Germany?');
+            assert.equal(answer.result, 'Angela Merkel');
+            done();
+        });
+    });
+
+    it('returns correct answer for who is xyz\'s head of government question', function(done) {
+
+        app.answer('Who is Germany\'s head of government? ', function(answer) {
             assert.equal(answer.interpretation, 'head of government of Germany?');
             assert.equal(answer.result, 'Angela Merkel');
             done();

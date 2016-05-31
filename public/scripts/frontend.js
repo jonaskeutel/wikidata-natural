@@ -48,19 +48,19 @@ function onKeyPress(event) {
 }
 
 function isArrowUpKey(event) {
-    return event.keyCode == 38;
+    return event.keyCode === 38;
 }
 
 function isArrowDownKey(event) {
-    return event.keyCode == 40;
+    return event.keyCode === 40;
 }
 
 function isEnterKey(event) {
-    return event.keyCode == 13;
+    return event.keyCode === 13;
 }
 
 function retypePreviousQuestion() {
-    if (displayedPreviousQuestionIndex == previousQuestions.length) {
+    if (displayedPreviousQuestionIndex === previousQuestions.length) {
         currentUnsentMessage = inputField.value;
     }
     displayedPreviousQuestionIndex = Math.max(0, displayedPreviousQuestionIndex - 1);
@@ -101,7 +101,7 @@ function displayMessage(content, author) {
 function submitApi(questionText) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
             displayInterpretationAndAnswer(JSON.parse(xhttp.responseText));
         }
     };

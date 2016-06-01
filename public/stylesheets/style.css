@@ -4,7 +4,9 @@
 }
 
 html {
-    background: #eee;
+    background-color: #eee;
+    background-image: url(../images/triangles.svg);
+    background-attachment: fixed;
 }
 
 body {

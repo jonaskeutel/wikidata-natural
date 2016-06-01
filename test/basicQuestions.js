@@ -98,6 +98,16 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for head of state question', function(done) {
+
+        app.answer('Who is the head of state of Germany? ', function(answer) {
+            console.log(answer);
+            assert.equal(answer.interpretation, 'head of state of Germany?');
+            assert.equal(answer.result, 'The head of state of Germany is Joachim Gauck.');
+            done();
+        });
+    });
+
     it('returns correct answer for who is xyz\'s head of government question', function(done) {
 
         app.answer('Who is Germany\'s head of government? ', function(answer) {
@@ -113,7 +123,7 @@ describe('basicQuestions', function() {
         app.answer('What is the cast of Inception? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'cast member of Inception?');
-            assert.equal(answer.result, 'Marion Cotillard');
+            assert.equal(answer.result, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
             done();
         });
     });
@@ -124,7 +134,7 @@ describe('basicQuestions', function() {
         app.answer('Who is leading Germany? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
+            assert.equal(answer.result, 'The head of state of Germany is Joachim Gauck.');
             done();
         });
     });

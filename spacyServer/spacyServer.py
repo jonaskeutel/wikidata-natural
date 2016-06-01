@@ -52,7 +52,7 @@ def addChildDependencies(jsonArray):
     index = 0;
     for entry in jsonArray:
         if (entry['depParent'] != index):
-            jsonArray[entry['depParent']]['depChildren'].append({'depType': entry['depType'], 'pos': index, 'tag': entry['tag']})
+            jsonArray[entry['depParent']]['depChildren'].append({'depType': entry['depType'], 'pos': index, 'tag': entry['tag'], 'orth': entry['orth']})
         index += 1
     return jsonArray
 

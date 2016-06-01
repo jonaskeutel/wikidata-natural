@@ -3,20 +3,18 @@ html
     head
         title Ask Wikidata
         script(src='/scripts/frontend.js')
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js')
         link(rel='stylesheet', href='/stylesheets/style.css')
         link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
         meta(name='viewport', content='width=device-width, initial-scale=0.6')
     body
-        #window
-            h1 Ask Wikidata
-            #conversation
-                if conversation
-                    each value in conversation
-                        .question #{value['question']}
-                        if value.interpretation
-                            .interpretation #{value['interpretation']}
-                        .answer #{value.answer}
-            form.center(action="/", method="post")
-                input(type="text", name="question", id="question", autofocus, autocomplete="off")
-                input(type="submit", class="submitHidden", tabindex="-1")
+        h1 Ask Wikidata
+        #conversation
+            if conversation
+                each value in conversation
+                    .question #{value['question']}
+                    if value.interpretation
+                        .interpretation #{value['interpretation']}
+                    .answer #{value.answer}
+        form.center(action="/", method="post")
+            input(type="text", name="question", id="question", autofocus, autocomplete="off")
+            input(type="submit", class="submitHidden", tabindex="-1")

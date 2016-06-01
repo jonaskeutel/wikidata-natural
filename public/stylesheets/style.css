@@ -4,30 +4,12 @@
 }
 
 html {
-    background: #eee;
+    background-color: #eee;
+    background-image: url(../images/triangles.svg);
+    background-attachment: fixed;
 }
 
 body {
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-}
-
-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    width: 100vw;
-    height: 100vh;
-}
-
-svg path {
-    fill: none!important;
-    stroke: rgba(26,134,79,0.2)!important;
-}
-
-#window {
     margin: 1em auto;
     max-width: 40em;
     width: calc(100vw - 5em);

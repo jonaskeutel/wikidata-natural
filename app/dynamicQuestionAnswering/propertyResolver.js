@@ -20,8 +20,9 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     if (!property.id && !conversationHistory.wasEmpty()) {
         property = conversationHistory.messages()[questionId - 1].property;
     }
-    if (!property.id) {
-        callback("Could not find Property");
+    if (!property || !property.id) {
+        callback("Could not find a property in your query nor in conversation history.");
+        return;
     }
     console.log("Property lookup returned", property.id, "-", property.label);
     callback(null, property);
@@ -102,7 +103,7 @@ function mapInterrogatives(interrogatives, taggedWords) {
 function lookupPropertyViaApi(propertyString, context) {
     var url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&type=property&format=json&search=" + propertyString;
     var queryData = JSON.parse(decoder.write(request("GET", url).getBody()));
-    if (!queryData || !queryData.search[0]) {
+    if (!queryData || !queryData.search || !queryData.search[0]) {
         return {};
     }
 

@@ -33,21 +33,7 @@ router.post('/ajax/', function(req, res, next) {
 });
 
 function renderIndex(res) {
-    res.render('index',
-                {
-                    conversation: conversationHistory.messages(),
-                    placeholder: getPlaceholderQuestion()
-                });
-}
-
-function getPlaceholderQuestion() {
-    var questions = [
-        'Who is leading China?',
-        'What are the five biggest cities in Germany that have a female mayor?',
-        'When was Jimmy Wales born?'
-    ];
-    var index = Math.floor(Math.random() * questions.length);
-    return questions[index];
+    res.render('index', {conversation: conversationHistory.messages()});
 }
 
 module.exports = router;

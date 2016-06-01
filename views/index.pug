@@ -15,5 +15,5 @@ html
                         .interpretation #{value['interpretation']}
                     .answer #{value.answer}
         form.center(action="/", method="post")
-            input(type="text", name="question", id="question", autofocus, placeholder=placeholder)
+            input(type="text", name="question", id="question", autofocus, autocomplete="off")
             input(type="submit", class="submitHidden", tabindex="-1")

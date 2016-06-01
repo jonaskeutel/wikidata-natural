@@ -18,14 +18,19 @@ exports.answer = function(question, callback, fallback) {
     var questionId = conversationHistory.addQuestion(question);
     var property = null;
     var namedEntity = null;
+    var errorMessages = "";
 
-    spacyClient.getSpacyTaggedWords(question, function(spacyTaggedWords) {
+    var questionNormalized = normalizeInterpunctuation(question);
+
+    spacyClient.getSpacyTaggedWords(questionNormalized, function(spacyTaggedWords) {
         entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityFound);
         propertyResolver.findPropertyId(spacyTaggedWords, questionId, onPropertyFound);
     });
 
     function onEntityFound(err, foundEntity) {
-        /* TODO error handling */
+        if (err) {
+            errorMessages += err + ' ';
+        }
         namedEntity = foundEntity;
         if (bothResultsArrived()) {
             buildQuery();
@@ -33,7 +38,9 @@ exports.answer = function(question, callback, fallback) {
     }
 
     function onPropertyFound(err, foundProperty) {
-        /* TODO error handling */
+        if (err) {
+            errorMessages += err + ' ';
+        }
         property = foundProperty;
         if (bothResultsArrived()) {
             buildQuery();
@@ -45,6 +52,10 @@ exports.answer = function(question, callback, fallback) {
     }
 
     function buildQuery() {
+        if (errorMessages !== "") {
+            callback({answer: errorMessages});
+            return;
+        }
         conversationHistory.addProperty(property, questionId);
         conversationHistory.addNamedEntity(namedEntity, questionId);
 
@@ -85,3 +96,7 @@ exports.answer = function(question, callback, fallback) {
         }
     }
 };
+
+function normalizeInterpunctuation(question) {
+    return question.replace(/’|´|`/g, '\'');
+}

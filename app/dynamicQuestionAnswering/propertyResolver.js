@@ -9,11 +9,7 @@ var conversationHistory = require('./../conversationHistory.js');
 var propertyPartsArray = []; //global...
 
 exports.findPropertyId = function(taggedWords, questionId, callback) {
-    // var propertyString = findPropertyAsVerb(taggedWords);
-    // if (propertyString === "") {
-    //     propertyString = findPropertyAsDescription(taggedWords);
-    // }
-    var propertyString = findPropertyWithSpacy(taggedWords);
+    var propertyString = findProperty(taggedWords);
 
     console.log("Extracted Property:", propertyString);
 
@@ -30,16 +26,14 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     callback(null, property);
 };
 
-function findPropertyWithSpacy(taggedWords) {
+function findProperty(taggedWords) {
     propertyPartsArray = [];
     var rootIndex = findRootIndex(taggedWords);
     // assuming, only one children-path yields to namedEntity
     if (findPropertyString(taggedWords, rootIndex)) {
         var result = propertyPartsArray[propertyPartsArray.length-1] === "of" ? propertyPartsArray.slice(0, propertyPartsArray.length - 1).join(' ') : propertyPartsArray.join(' ');
-        console.log(result);
         return result;
     } else {
-        console.log("not successfull...");
         return "";
     }
 }
@@ -50,44 +44,6 @@ function findRootIndex(taggedWords) {
             return i;
         }
     }
-}
-
-function findPropertyAsVerb(taggedWords) {
-    var propertyString = "";
-    for (var i in taggedWords) {
-        var taggedWord = taggedWords[i];
-        var word = taggedWord.orth;
-        var tag = taggedWord.tag;
-        if (tag.startsWith('V')) {
-            propertyString += word + " ";
-        }
-    }
-
-    propertyString = propertyString.toLowerCase().replace(/is|are|was|were|been/g, '');
-    return propertyString.trim();
-}
-
-function findPropertyAsDescription(taggedWords) {
-    // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
-    var propertyString = "";
-    var start = false;
-
-    for (var i in taggedWords) {
-        var taggedWord = taggedWords[i];
-        var word = taggedWord.orth;
-        var tag = taggedWord.tag;
-        if (start) {
-            if (tag == 'IN') {
-                break;
-            }
-            propertyString += word + " ";
-        }
-
-        if (tag == 'DT') {
-            start = true;
-        }
-    }
-    return propertyString.trim();
 }
 
 function findInterrogatives(taggedWords) {

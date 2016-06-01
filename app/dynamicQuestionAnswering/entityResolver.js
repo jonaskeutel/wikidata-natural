@@ -5,7 +5,7 @@ var conversationHistory = require('./../conversationHistory.js');
 
 
 exports.findNamedEntity = function(taggedWords, questionId, callback) {
-    var namedEntityString = extractNamedEntityStringViaSpacy(taggedWords);
+    var namedEntityString = extractNamedEntityString(taggedWords);
 
     if (namedEntityString === "") {
         returnHistoryEntityInstead(callback, questionId);
@@ -33,7 +33,7 @@ function returnHistoryEntityInstead(callback, questionId) {
     callback(null, namedEntity);
 }
 
-function extractNamedEntityStringViaSpacy(taggedWords) {
+function extractNamedEntityString(taggedWords) {
     console.log(taggedWords);
     var namedEntityString = "";
     for (var i = 0; i < taggedWords.length; i++) {
@@ -42,35 +42,4 @@ function extractNamedEntityStringViaSpacy(taggedWords) {
         }
     }
     return namedEntityString.trim();
-}
-
-function extractNamedEntityString(taggedWords) {
-    var tags = ["NNP", "NN"];
-    // birthdate of Barack Obama --> NN IN NN NN --> namedEntity = birthdate Barack Obama --> check for IN
-    var prepositionMightBeInEntity = false;
-
-    var namedEntityString = "";
-
-    // at first, try to find NNP or NNPS ("Proper Noun"); if this wasn't successful, also try "NN" or "NNS" ("Noun")
-    for (var i in tags) {
-        for (var j in taggedWords) {
-            var taggedWord = taggedWords[j];
-            var word = taggedWord.orth;
-            var tag = taggedWord.tag;
-            if (tag.startsWith(tags[i])) {
-                if (prepositionMightBeInEntity) {
-                    namedEntityString = "";
-                    prepositionMightBeInEntity = false;
-                }
-                namedEntityString += word + " ";
-            }
-            if (namedEntityString !== "" && tag == 'IN') {
-                prepositionMightBeInEntity = true;
-            }
-        }
-        if (namedEntityString !== "") {
-            break;
-        }
-    }
-    return namedEntityString;
 }

@@ -103,7 +103,7 @@ describe('basicQuestions', function() {
         app.answer('Who is the head of state of Germany? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'The head of state of Germany is Joachim Gauck.');
+            assert.equal(answer.result, 'Joachim Gauck');
             done();
         });
     });

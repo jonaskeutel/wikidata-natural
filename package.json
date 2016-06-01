@@ -10,6 +10,7 @@
     "bayes": "0.0.4",
     "body-parser": "~1.13.2",
     "express": "~4.13.1",
+    "mocha": "^2.5.3",
     "morgan": "~1.6.1",
     "natural": "^0.2.1",
     "node-rest-client": "^1.8.0",

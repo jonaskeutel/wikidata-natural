@@ -24,8 +24,8 @@ exports.findNamedEntity = function(taggedWords, questionId, callback) {
 
 
 function returnHistoryEntityInstead(callback, questionId) {
-    if (conversationHistory.isEmpty()) {
-        callback("Could not find named entity.");
+    if (conversationHistory.wasEmpty()) {
+        callback("Could not find named entity in question or conversation history.");
         return;
     }
     var namedEntity = conversationHistory.messages()[questionId - 1].answerEntity;

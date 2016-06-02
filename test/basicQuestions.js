@@ -42,6 +42,15 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for when did die question', function(done) {
+
+        app.answer('When did Albert Einstein die?', function(answer) {
+            assert.equal(answer.interpretation, 'date of death of Albert Einstein?');
+            assert.equal(answer.result, '1955-04-18T00:00:00Z');
+            done();
+        });
+    });
+
     it('returns correct answer for where died question', function(done) {
 
         app.answer('Where died Albert Einstein?', function(answer) {
@@ -72,9 +81,9 @@ describe('basicQuestions', function() {
 
     it('returns correct answer for what is xyz\' population question', function(done) {
 
-        app.answer('What is the Germany\'s population? ', function(answer) {
+        app.answer('What is Germany\'s population? ', function(answer) {
             assert.equal(answer.interpretation, 'population of Germany?');
-            assert.equal(answer.result, '81292400');
+            assert(answer.result > '75000000');
             done();
         });
     });

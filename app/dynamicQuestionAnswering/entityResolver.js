@@ -37,7 +37,7 @@ function extractNamedEntityString(taggedWords) {
     console.log(taggedWords);
     var namedEntityString = "";
     for (var i = 0; i < taggedWords.length; i++) {
-        if (taggedWords[i].entType != '') {
+        if (taggedWords[i].entType !== '') {
             namedEntityString += taggedWords[i].orth + " ";
         }
     }

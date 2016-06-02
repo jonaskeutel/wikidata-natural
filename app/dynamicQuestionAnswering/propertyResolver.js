@@ -135,7 +135,7 @@ function isFirstWordIn(description, context) {
 function findPropertyString(taggedWords, index) {
     var element = taggedWords[index];
 
-    if (element.entType != '') {
+    if (element.entType !== '') {
         return true;
     }
 

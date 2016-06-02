@@ -39,10 +39,8 @@ def parse(question):
 def toArray(tokenDict):
 	tokenArray = []
 	keys = sorted(tokenDict.keys())
-	# print(keys, file=sys.stderr, flush=True)
 	for key in keys:
 		token = tokenDict[key]
-		# print(token, file=sys.stderr, flush=True)
 		depParentIndex = keys.index(token['depParent'])
 		token['depParent'] = depParentIndex
 		tokenArray.append(token)

@@ -42,6 +42,15 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for when did die question', function(done) {
+
+        app.answer('When did Albert Einstein die?', function(answer) {
+            assert.equal(answer.interpretation, 'date of death of Albert Einstein?');
+            assert.equal(answer.result, '1955-04-18T00:00:00Z');
+            done();
+        });
+    });
+
     it('returns correct answer for where died question', function(done) {
 
         app.answer('Where died Albert Einstein?', function(answer) {
@@ -70,6 +79,15 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for what is xyz\' population question', function(done) {
+
+        app.answer('What is Germany\'s population? ', function(answer) {
+            assert.equal(answer.interpretation, 'population of Germany?');
+            assert(answer.result > '75000000');
+            done();
+        });
+    });
+
 
     it('returns correct answer for who is president question', function(done) {
 
@@ -89,13 +107,32 @@ describe('basicQuestions', function() {
         });
     });
 
+    it('returns correct answer for head of state question', function(done) {
+
+        app.answer('Who is the head of state of Germany? ', function(answer) {
+            console.log(answer);
+            assert.equal(answer.interpretation, 'head of state of Germany?');
+            assert.equal(answer.result, 'Joachim Gauck');
+            done();
+        });
+    });
+
+    it('returns correct answer for who is xyz\'s head of government question', function(done) {
+
+        app.answer('Who is Germany\'s head of government? ', function(answer) {
+            assert.equal(answer.interpretation, 'head of government of Germany?');
+            assert.equal(answer.result, 'Angela Merkel');
+            done();
+        });
+    });
+
     it('returns correct answer for what is the cast question', function(done) {
         this.skip();
 
         app.answer('What is the cast of Inception? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'cast member of Inception?');
-            assert.equal(answer.result, 'Marion Cotillard');
+            assert.equal(answer.result, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
             done();
         });
     });
@@ -106,7 +143,7 @@ describe('basicQuestions', function() {
         app.answer('Who is leading Germany? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
+            assert.equal(answer.result, 'The head of state of Germany is Joachim Gauck.');
             done();
         });
     });

@@ -33,34 +33,13 @@ function returnHistoryEntityInstead(callback, questionId) {
     callback(null, namedEntity);
 }
 
-
 function extractNamedEntityString(taggedWords) {
-    var tags = ["NNP", "NN"];
-    // birthdate of Barack Obama --> NN IN NN NN --> namedEntity = birthdate Barack Obama --> check for IN
-    var prepositionMightBeInEntity = false;
-
+    console.log(taggedWords);
     var namedEntityString = "";
-
-    // at first, try to find NNP or NNPS ("Proper Noun"); if this wasn't successful, also try "NN" or "NNS" ("Noun")
-    for (var i in tags) {
-        for (var j in taggedWords) {
-            var taggedWord = taggedWords[j];
-            var word = taggedWord.orth;
-            var tag = taggedWord.tag;
-            if (tag.startsWith(tags[i])) {
-                if (prepositionMightBeInEntity) {
-                    namedEntityString = "";
-                    prepositionMightBeInEntity = false;
-                }
-                namedEntityString += word + " ";
-            }
-            if (namedEntityString !== "" && tag == 'IN') {
-                prepositionMightBeInEntity = true;
-            }
-        }
-        if (namedEntityString !== "") {
-            break;
+    for (var i = 0; i < taggedWords.length; i++) {
+        if (taggedWords[i].entType !== '') {
+            namedEntityString += taggedWords[i].orth + " ";
         }
     }
-    return namedEntityString;
+    return namedEntityString.trim();
 }

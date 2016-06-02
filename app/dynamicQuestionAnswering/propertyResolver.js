@@ -6,11 +6,10 @@ var decoder = new StringDecoder('utf8');
 var stringSimilarity = require('string-similarity');
 var conversationHistory = require('./../conversationHistory.js');
 
+var propertyPartsArray = []; //global...
+
 exports.findPropertyId = function(taggedWords, questionId, callback) {
-    var propertyString = findPropertyAsVerb(taggedWords);
-    if (propertyString === "") {
-        propertyString = findPropertyAsDescription(taggedWords);
-    }
+    var propertyString = findProperty(taggedWords);
 
     console.log("Extracted Property:", propertyString);
 
@@ -28,42 +27,24 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     callback(null, property);
 };
 
-function findPropertyAsVerb(taggedWords) {
-    var propertyString = "";
-    for (var i in taggedWords) {
-        var taggedWord = taggedWords[i];
-        var word = taggedWord.orth;
-        var tag = taggedWord.tag;
-        if (tag.startsWith('V')) {
-            propertyString += word + " ";
-        }
+function findProperty(taggedWords) {
+    propertyPartsArray = [];
+    var rootIndex = findRootIndex(taggedWords);
+    // assuming, only one children-path yields to namedEntity
+    if (findPropertyString(taggedWords, rootIndex)) {
+        var result = propertyPartsArray[propertyPartsArray.length-1] === "of" ? propertyPartsArray.slice(0, propertyPartsArray.length - 1).join(' ') : propertyPartsArray.join(' ');
+        return result;
+    } else {
+        return "";
     }
-
-    propertyString = propertyString.toLowerCase().replace(/is|are|was|were|been/g, '');
-    return propertyString.trim();
 }
 
-function findPropertyAsDescription(taggedWords) {
-    // everything between DT (determiner: the, some, ...) and IN (preposition: of, by, in, ...)
-    var propertyString = "";
-    var start = false;
-
-    for (var i in taggedWords) {
-        var taggedWord = taggedWords[i];
-        var word = taggedWord.orth;
-        var tag = taggedWord.tag;
-        if (start) {
-            if (tag == 'IN') {
-                break;
-            }
-            propertyString += word + " ";
-        }
-
-        if (tag == 'DT') {
-            start = true;
+function findRootIndex(taggedWords) {
+    for (var i = 0; i < taggedWords.length; i++) {
+        if (taggedWords[i].depType === 'ROOT') {
+            return i;
         }
     }
-    return propertyString.trim();
 }
 
 function findInterrogatives(taggedWords) {
@@ -109,6 +90,13 @@ function lookupPropertyViaApi(propertyString, context) {
 
     var properties = queryData.search;
 
+    // look if we have perfect match
+    for (var i = 0; i < properties.length; i++) {
+        if (properties[i].label === propertyString) {
+            return {id: properties[i].id, label: properties[i].label};
+        }
+    }
+
     if (context.length === 0) {
         return {id: properties[0].id, label: properties[0].label};
     }
@@ -142,4 +130,28 @@ function isSubstring(description, context) {
 
 function isFirstWordIn(description, context) {
     return (description.toLowerCase().indexOf(context) === 0);
+}
+
+
+function findPropertyString(taggedWords, index) {
+    var element = taggedWords[index];
+
+    if (element.entType !== '') {
+        return true;
+    }
+
+    if (element.lemma !== "be" && element.lemma !== "have") {
+        propertyPartsArray.push(element.orth);
+    }
+
+    for (var i = 0; i < element.depChildren.length; i++) {
+        if (findPropertyString(taggedWords, element.depChildren[i].pos)) {
+            return true;
+        }
+    }
+
+    if (element.lemma !== "be" && element.lemma !== "have") {
+        propertyPartsArray = propertyPartsArray.slice(0, propertyPartsArray.length - 1);
+    }
+    return false;
 }

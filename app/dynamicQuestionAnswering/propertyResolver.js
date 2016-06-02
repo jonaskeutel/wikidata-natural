@@ -139,7 +139,7 @@ function findPropertyString(taggedWords, index) {
         return true;
     }
 
-    if (element.lemma !== "be") {
+    if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray.push(element.orth);
     }
 
@@ -149,7 +149,7 @@ function findPropertyString(taggedWords, index) {
         }
     }
 
-    if (element.lemma !== "be") {
+    if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray = propertyPartsArray.slice(0, propertyPartsArray.length - 1);
     }
     return false;

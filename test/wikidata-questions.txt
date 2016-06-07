@@ -1,0 +1,41 @@
+What is the highest point in Norway?;getPropertyValue;highest point;Norway;Galdhøpiggen
+Is Deshauna Barber female?;comparePropertyValue;sex or gender;Deshauna Barber;true
+What is the gender of Deshauna Barber?;getPropertyValue;female
+Which country is Deshauna Barber a citizen of?;getPropertyValue;country of citizenship;United States of America
+Was the Gotthard Base Tunnel opened before 2016?;comparePropertyValue;Gotthard Base Tunnel;date of official opening;false
+Where is the Gotthard Base Tunnel?;getPropertyValue;Gotthard Base Tunnel;coordinate location;46°36'0"N, 8°45'54"E
+Does the Gotthard Base Tunnel have a website?;getPropertyValue;Gotthard Base Tunnel;official website;https://www.alptransit-portal.ch/en/landingpage/
+Who is Mikhail Bulgakov?;getDescription;Mikhail Bulgakov;None;Russian author primarily known for his novel "Master and Margarita"
+What was the Soviet Union’s motto?;getPropertyValue;motto;Workers of the world, unite!
+What country’s TLD is .su?;getPropertyValue;.su;country;Soviet Union
+Was the Soviet Union a federal republic?;comparePropertyValue;Soviet Union;instance of;true
+What currency was used in the Soviet Union?;getPropertyValue;Soviet Union;currency;Soviet ruble
+What continent is Turkey on?;getPropertyValue;Turkey;continent;Asia
+What timezone does Turkey have?;getPropertyValue;Turkey;located in time zone;UTC+02:00
+Whats the population of Turkey?;getPropertyValue;Turkey;population;75932641
+On what side of the road do you drive in Turkey?;getPropertyValue;Turkey;driving side;right
+Who is the mother of Muhammad Ali?;getPropertyValue;Muhammad Ali;mother;Odessa Grady Clay
+How many Children did Muhammad Ali have?;getPropertyValue;Muhammad Ali;number of children;9
+What does Hervé Baudry do?;getPropertyValue;Hervé Baudry;occupation;caicaturist
+In what country is Montmartre?;getPropertyValue;country;France
+When was Paris founded?;getPropertyValue;Paris;inception;300 BCE
+Does Paris share a border with Gentilly?;comparePropertyValue;Paris;shares border with;true
+What’s the zip code of Paris?;getPropertyValue;Paris;postal code;75116
+What’s the symbol for the currency Euro?;getPropertyValue;Euro;unit symbol;€
+What is the unit symbol of Euro?;getPropertyValue;Euro;unit symbol;€
+What’s the TeX string for Euro?;getPropertyValue;Euro;TeX string;\texteuro
+Where was AC/DC founded?;getPropertyValue;AC/DC;location of formation;Sydney
+What genre is AC/DC?;getPropertyValue;AC/DC;genre;rock and roll
+What is electric current?;getDescription;electric current;None;flow of electric charge (for a specific quantities see Q29996 or Q234072)
+When was Circus of Love published?;getPropertyValue;CircusOfLove;publication date;19 June 1954
+What language is Circus of Love in?;getPropertyValue;Circus of Love;original language of work;German
+Who directed Circus of Love?;getPropertyValue;Circus of Love;director;Kurt Neumann
+What’s Circus of Love’s duration?;getPropertyValue;Circus of Love;duration;93 minutes
+What’s the parent taxon of gorilla?;getPropertyValue;gorilla;parent taxon;Gorillini
+Who was Elvis’s spouse?;getPropertyValue;Elvis Presley;spouse;Priscilla Presley
+Is Elvis dead?;compareProperty;Elvis Presley;date of death;true
+How did Elvis die?;getPropertyValue;Elvis Presley;manner of death;natural causes
+What instrument did Elvis play?;getPropertyValue;Elvis Presley;instrument;guitar
+What’s Marie Curie’s birth name?;getPropertyValue;Marie Curie;birth name;Maria Salomea Skłodowska (Polish)
+Where was Marie Curie buried?;getPropertyValue;Marie Curie;place of burial;Panthéon
+What’s Marie Curie’s Erdős number?;getPropertyValue;Marie Curie;Erdős number;7

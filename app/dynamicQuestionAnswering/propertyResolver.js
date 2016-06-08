@@ -8,16 +8,19 @@ var conversationHistory = require('./../conversationHistory.js');
 
 var propertyPartsArray = []; //global...
 
-exports.findPropertyId = function(taggedWords, questionId, callback) {
-    var propertyString = findProperty(taggedWords);
+exports.findPropertyId = function(taggedWords, questionId, position, callback) {
+    console.log("Named entity is at position: " + position)
+    var propertyString = findProperty(taggedWords, position);
 
     console.log("Extracted Property:", propertyString);
 
     var interrogatives = findInterrogatives(taggedWords);
     var context = mapInterrogatives(interrogatives, taggedWords);
     var property = lookupPropertyViaApi(propertyString, context);
+    property.propertyString = propertyString;
+
     if (!property.id && !conversationHistory.wasEmpty()) {
-        property = conversationHistory.messages()[questionId - 1].property;
+        property = conversationHistory.messages()[questionId - 1].property; // TODO: Better lookup (keep interrogatives and propertyString in mind)
     }
     if (!property || !property.id) {
         callback("Could not find a property in your query nor in conversation history.");
@@ -27,11 +30,11 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     callback(null, property);
 };
 
-function findProperty(taggedWords) {
+function findProperty(taggedWords, position) {
     propertyPartsArray = [];
     var rootIndex = findRootIndex(taggedWords);
     // assuming, only one children-path yields to namedEntity
-    if (findPropertyString(taggedWords, rootIndex)) {
+    if (findPropertyString(taggedWords, rootIndex, position)) {
         var result = propertyPartsArray[propertyPartsArray.length-1] === "of" ? propertyPartsArray.slice(0, propertyPartsArray.length - 1).join(' ') : propertyPartsArray.join(' ');
         return result;
     } else {
@@ -40,7 +43,9 @@ function findProperty(taggedWords) {
 }
 
 function findRootIndex(taggedWords) {
+    console.log("find root");
     for (var i = 0; i < taggedWords.length; i++) {
+        console.log(taggedWords[i].depType);
         if (taggedWords[i].depType === 'ROOT') {
             return i;
         }
@@ -133,10 +138,10 @@ function isFirstWordIn(description, context) {
 }
 
 
-function findPropertyString(taggedWords, index) {
+function findPropertyString(taggedWords, index, positionOfNamedEntity) {
     var element = taggedWords[index];
-
-    if (element.entType !== '') {
+    console.log(index, positionOfNamedEntity, element.orth);
+    if (index === positionOfNamedEntity) {
         return true;
     }
 
@@ -145,7 +150,7 @@ function findPropertyString(taggedWords, index) {
     }
 
     for (var i = 0; i < element.depChildren.length; i++) {
-        if (findPropertyString(taggedWords, element.depChildren[i].pos)) {
+        if (findPropertyString(taggedWords, element.depChildren[i].pos, positionOfNamedEntity)) {
             return true;
         }
     }

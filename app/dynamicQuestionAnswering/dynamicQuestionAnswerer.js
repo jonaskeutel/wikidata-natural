@@ -23,8 +23,7 @@ exports.answer = function(question, callback, fallback) {
     var questionNormalized = normalizeInterpunctuation(question);
 
     spacyClient.getSpacyTaggedWords(questionNormalized, function(spacyTaggedWords) {
-        entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityFound);
-        propertyResolver.findPropertyId(spacyTaggedWords, questionId, onPropertyFound);
+        entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityDetected, onEntityFound);
     });
 
     function onEntityFound(err, foundEntity) {
@@ -35,6 +34,14 @@ exports.answer = function(question, callback, fallback) {
         if (bothResultsArrived()) {
             buildQuery();
         }
+    }
+
+    function onEntityDetected(taggedWords, position) {
+        console.log("Tagged words: " + taggedWords);
+        console.log("QuestionID: " + questionId);
+        console.log("Position: " + position);
+        console.log("onPropertyFound: " + onPropertyFound);
+        propertyResolver.findPropertyId(taggedWords, questionId, position, onPropertyFound);
     }
 
     function onPropertyFound(err, foundProperty) {
@@ -93,7 +100,9 @@ exports.answer = function(question, callback, fallback) {
                 id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length),
                 label: queryResult.objectLabel.value
             };
-
+            if (queryResult.genderLabel) {
+                answerEntity.gender = queryResult.genderLabel.value;
+            }
             data.result = answerEntity;
             conversationHistory.addAnswerEntity(answerEntity, questionId);
 

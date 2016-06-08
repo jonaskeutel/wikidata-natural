@@ -2,8 +2,9 @@
 
 var querystring = require("querystring");
 
-var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel WHERE { " +
+var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel ?gender ?genderLabel WHERE { " +
             "  wd:[ITEM_ID] wdt:[PROPERTY_ID] ?object . " +
+            "  OPTIONAL {?object  wdt:P21 ?gender . } " +
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } " +
             "}";
 

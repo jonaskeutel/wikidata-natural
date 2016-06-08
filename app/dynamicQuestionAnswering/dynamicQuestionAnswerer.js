@@ -67,9 +67,12 @@ exports.answer = function(question, callback, fallback) {
         });
 
         function onQueryResult(queryData) {
-            var data = {};
+            var data = {
+                property: property,
+                namedEntity: namedEntity,
+                interpretation: property.label + " of " + namedEntity.label + "?"
+            };
 
-            data.interpretation = property.label + " of " + namedEntity.label + "?";
             conversationHistory.addInterpretation(data.interpretation, questionId);
 
             var jsonResponse = JSON.parse(decoder.write(queryData));
@@ -83,7 +86,6 @@ exports.answer = function(question, callback, fallback) {
 
             var queryResult = jsonResponse.results.bindings[0];
 
-            data.result = queryResult.objectLabel.value;
             data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
             var answerIdPart = queryResult.object.value;
@@ -91,7 +93,11 @@ exports.answer = function(question, callback, fallback) {
                 id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length),
                 label: queryResult.objectLabel.value
             };
+
+            data.result = answerEntity;
             conversationHistory.addAnswerEntity(answerEntity, questionId);
+
+            console.log(data);
             callback(data);
         }
     }

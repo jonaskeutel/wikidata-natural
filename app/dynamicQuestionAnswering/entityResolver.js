@@ -69,7 +69,7 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     if (type === "PERSON") {
         gender = "?";
     } else {
-        gender = null;
+        gender = 'neuter';
     }
     return {
         string: namedEntityString.trim(),

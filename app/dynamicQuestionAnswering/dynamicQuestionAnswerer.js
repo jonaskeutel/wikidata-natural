@@ -98,14 +98,15 @@ exports.answer = function(question, callback, fallback) {
                 id: id,
                 label: queryResult.objectLabel.value
             };
-            console.log(answerEntity);
+
             if (queryResult.genderLabel) {
                 answerEntity.gender = queryResult.genderLabel.value;
             } else if (id) {
                 answerEntity.gender = 'neutr';
-            } {
+            } else {
                 answerEntity.gender = null;
             }
+            console.log(answerEntity);
             data.result = answerEntity;
             conversationHistory.addAnswerEntity(answerEntity, questionId);
 

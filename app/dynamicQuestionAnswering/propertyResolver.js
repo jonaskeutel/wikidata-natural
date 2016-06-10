@@ -35,7 +35,7 @@ function findProperty(taggedWords, positions) {
     propertyPartsArray = [];
     var rootIndex = findRootIndex(taggedWords);
     // assuming, only one children-path yields to namedEntity
-    if (findPropertyString(taggedWords, rootIndex, positions)) {
+    if (findPropertyString(taggedWords, rootIndex, 0, positions)) {
         var result = propertyPartsArray[propertyPartsArray.length-1] === "of" ? propertyPartsArray.slice(0, propertyPartsArray.length - 1).join(' ') : propertyPartsArray.join(' ');
         return result;
     } else {
@@ -137,24 +137,30 @@ function isFirstWordIn(description, context) {
 }
 
 
-function findPropertyString(taggedWords, index, positionsOfNamedEntity) {
+function findPropertyString(taggedWords, index, amountOfVerbsOrNouns, positionsOfNamedEntity) {
     var element = taggedWords[index];
-    if (positionsOfNamedEntity.indexOf(index) !== -1) {
+    if (positionsOfNamedEntity.indexOf(index) !== -1 && amountOfVerbsOrNouns > 0) {
         return true;
     }
 
     if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray.push(element.orth);
+        if (element.tag.startsWith('V') || element.tag.startsWith('NN')) {
+            amountOfVerbsOrNouns++;
+        }
     }
 
     for (var i = 0; i < element.depChildren.length; i++) {
-        if (findPropertyString(taggedWords, element.depChildren[i].pos, positionsOfNamedEntity)) {
+        if (findPropertyString(taggedWords, element.depChildren[i].pos, amountOfVerbsOrNouns, positionsOfNamedEntity)) {
             return true;
         }
     }
 
     if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray = propertyPartsArray.slice(0, propertyPartsArray.length - 1);
+        if (element.tag.startsWith('V') || element.tag.startsWith('NN')) {
+            amountOfVerbsOrNouns--;
+        }
     }
     return false;
 }

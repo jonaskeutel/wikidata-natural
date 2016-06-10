@@ -37,10 +37,6 @@ exports.answer = function(question, callback, fallback) {
     }
 
     function onEntityDetected(taggedWords, position) {
-        console.log("Tagged words: " + taggedWords);
-        console.log("QuestionID: " + questionId);
-        console.log("Position: " + position);
-        console.log("onPropertyFound: " + onPropertyFound);
         propertyResolver.findPropertyId(taggedWords, questionId, position, onPropertyFound);
     }
 
@@ -77,6 +73,7 @@ exports.answer = function(question, callback, fallback) {
             var data = {
                 property: property,
                 namedEntity: namedEntity,
+                result: {},
                 interpretation: property.label + " of " + namedEntity.label + "?"
             };
 
@@ -96,12 +93,18 @@ exports.answer = function(question, callback, fallback) {
             data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
             var answerIdPart = queryResult.object.value;
+            var id = answerIdPart.lastIndexOf('Q') !== -1 ? answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length) : null;
             var answerEntity = {
-                id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length),
+                id: id,
                 label: queryResult.objectLabel.value
             };
+            console.log(answerEntity);
             if (queryResult.genderLabel) {
                 answerEntity.gender = queryResult.genderLabel.value;
+            } else if (id) {
+                answerEntity.gender = 'neutr';
+            } {
+                answerEntity.gender = null;
             }
             data.result = answerEntity;
             conversationHistory.addAnswerEntity(answerEntity, questionId);

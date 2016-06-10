@@ -5,20 +5,20 @@ var conversationHistory = require('./../conversationHistory.js');
 
 
 exports.findNamedEntity = function(taggedWords, questionId, namedEntityDetected, entityFound) {
-    var namedEntityString = extractNamedEntityString(taggedWords, namedEntityDetected);
+    var namedEntity = extractNamedEntity(taggedWords, namedEntityDetected);
 
-    if (namedEntityString === "") {
+    if (namedEntity.string === "") {
         returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId, taggedWords);
         return;
     }
-    console.log("Extracted Named Entity:", namedEntityString.trim());
+    console.log("Extracted Named Entity:", namedEntity.string.trim());
 
-    wikidataIdLookup.getWikidataId({searchText: namedEntityString.trim()}, function(err, data) {
+    wikidataIdLookup.getWikidataId({searchText: namedEntity.string.trim()}, function(err, data) {
         if (err) {
             returnHistoryEntityInstead(entityFound, questionId, namedEntityDetected, taggedWords);
             return;
         }
-        entityFound(null, {id: data.id, label: data.label});
+        entityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type});
     });
 };
 
@@ -34,13 +34,15 @@ function returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId
     for (var i = questionId - 1; i > questionId - 4 && i >= 0; i--) {
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
-        if (gender == answerEntity.gender) {
-            console.log("Didn't find namedEntity in question; using instead: ", answerEntity);
+        console.log("considering: " + answerEntity.id + "-" + answerEntity.label + " (" + answerEntity.gender + ")" + "...");
+        if (answerEntity.id && (gender === answerEntity.gender || (gender !== null && answerEntity.gender === "?"))) {
+            console.log("...taken");
             entityFound(null, answerEntity);
             return;
         }
-        if (gender == namedEntity.gender) {
-            console.log("Didn't find namedEntity in question; using instead: ", namedEntity);
+        console.log("considering: " + namedEntity.id + "-" + namedEntity.label + " (" + namedEntity.gender + ")" + "...");
+        if (namedEntity.id && (gender === namedEntity.gender || (gender !== null && namedEntity.gender === "?"))) {
+            console.log("...taken");
             entityFound(null, namedEntity);
             return;
         }
@@ -51,43 +53,52 @@ function returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId
 
 }
 
-function extractNamedEntityString(taggedWords, namedEntityDetected) {
-    var found = false;
+function extractNamedEntity(taggedWords, namedEntityDetected) {
+    var positions = [];
+    var type;
+    var gender;
     var namedEntityString = "";
     for (var i = 0; i < taggedWords.length; i++) {
         if (taggedWords[i].entType !== '') {
             namedEntityString += taggedWords[i].orth + " ";
-            if (!found) {
-                namedEntityDetected(taggedWords, i);
-            }
+            positions.push(i);
+            type = taggedWords[i].entType;
         }
     }
-    return namedEntityString.trim();
+    namedEntityDetected(taggedWords, positions);
+    if (type === "PERSON") {
+        gender = "?";
+    } else {
+        gender = null;
+    }
+    return {
+        string: namedEntityString.trim(),
+        gender: gender,
+        type: type
+    };
 }
 
 function detectGender(taggedWords, namedEntityDetected) {
-    console.log("no named entity found, looking instead for words like 'he', 'she', 'it', ...");
     for (var i = 0; i < taggedWords.length; i++) {
-        console.log(taggedWords[i].orth);
         switch (taggedWords[i].orth) {
             case 'he':
             case 'him':
             case 'his':
-                namedEntityDetected(taggedWords, i);
-                console.log(i);
+                namedEntityDetected(taggedWords, [i]);
                 return 'male';
             case 'she':
             case 'her':
-                namedEntityDetected(taggedWords, i);
-                console.log(i);
+            case 'hers':
+                namedEntityDetected(taggedWords, [i]);
                 return 'female';
             case 'it':
             case 'its':
-                namedEntityDetected(taggedWords, i);
-                console.log(i);
-                return undefined;
+                namedEntityDetected(taggedWords, [i]);
+                return 'neuter';
             default:
                 break;
         }
     }
+    // no entity at all...
+    namedEntityDetected(taggedWords, null)
 }

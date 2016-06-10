@@ -42,7 +42,7 @@ describe('discourseAnalysis', function() {
 
     it('remembers property from last question', function(done) {
         app.answer('Who is the president of China?', function(answ) {
-            app.answer('And from Germany?', function(answer) {
+            app.answer('And of Germany?', function(answer) {
                 assert.equal(answer.result.label, 'Joachim Gauck');
                 done();
             });

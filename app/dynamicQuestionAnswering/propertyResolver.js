@@ -8,16 +8,20 @@ var conversationHistory = require('./../conversationHistory.js');
 
 var propertyPartsArray = []; //global...
 
-exports.findPropertyId = function(taggedWords, questionId, callback) {
-    var propertyString = findProperty(taggedWords);
+exports.findPropertyId = function(taggedWords, questionId, positions, callback) {
+    console.log("Named entity is at position: " + positions)
+    var propertyString = findProperty(taggedWords, positions);
 
     console.log("Extracted Property:", propertyString);
 
     var interrogatives = findInterrogatives(taggedWords);
     var context = mapInterrogatives(interrogatives, taggedWords);
     var property = lookupPropertyViaApi(propertyString, context);
+    property.interrogatives = interrogatives;
+    property.propertyString = propertyString;
+
     if (!property.id && !conversationHistory.wasEmpty()) {
-        property = conversationHistory.messages()[questionId - 1].property;
+        property = returnHistoryPropertyInstead(questionId);
     }
     if (!property || !property.id) {
         callback("Could not find a property in your query nor in conversation history.");
@@ -27,11 +31,11 @@ exports.findPropertyId = function(taggedWords, questionId, callback) {
     callback(null, property);
 };
 
-function findProperty(taggedWords) {
+function findProperty(taggedWords, positions) {
     propertyPartsArray = [];
     var rootIndex = findRootIndex(taggedWords);
     // assuming, only one children-path yields to namedEntity
-    if (findPropertyString(taggedWords, rootIndex)) {
+    if (findPropertyString(taggedWords, rootIndex, 0, positions)) {
         var result = propertyPartsArray[propertyPartsArray.length-1] === "of" ? propertyPartsArray.slice(0, propertyPartsArray.length - 1).join(' ') : propertyPartsArray.join(' ');
         return result;
     } else {
@@ -133,25 +137,34 @@ function isFirstWordIn(description, context) {
 }
 
 
-function findPropertyString(taggedWords, index) {
+function findPropertyString(taggedWords, index, amountOfVerbsOrNouns, positionsOfNamedEntity) {
     var element = taggedWords[index];
-
-    if (element.entType !== '') {
+    if (positionsOfNamedEntity.indexOf(index) !== -1 && amountOfVerbsOrNouns > 0) {
         return true;
     }
 
     if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray.push(element.orth);
+        if (element.tag.startsWith('V') || element.tag.startsWith('NN')) {
+            amountOfVerbsOrNouns++;
+        }
     }
 
     for (var i = 0; i < element.depChildren.length; i++) {
-        if (findPropertyString(taggedWords, element.depChildren[i].pos)) {
+        if (findPropertyString(taggedWords, element.depChildren[i].pos, amountOfVerbsOrNouns, positionsOfNamedEntity)) {
             return true;
         }
     }
 
     if (element.lemma !== "be" && element.lemma !== "have") {
         propertyPartsArray = propertyPartsArray.slice(0, propertyPartsArray.length - 1);
+        if (element.tag.startsWith('V') || element.tag.startsWith('NN')) {
+            amountOfVerbsOrNouns--;
+        }
     }
     return false;
+}
+
+function returnHistoryPropertyInstead(questionId) {
+    return conversationHistory.messages()[questionId - 1].property;
 }

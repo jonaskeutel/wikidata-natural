@@ -10,7 +10,7 @@ describe('basicQuestions', function() {
 
         app.answer('Where was Angela Merkel born?', function(answer) {
             assert.equal(answer.interpretation, 'place of birth of Angela Merkel?');
-            assert.equal(answer.result, 'Barmbek-Nord');
+            assert.equal(answer.result.label, 'Barmbek-Nord');
             done();
         });
     });
@@ -19,7 +19,7 @@ describe('basicQuestions', function() {
 
         app.answer('Where was Merkel born?', function(answer) {
             assert.equal(answer.interpretation, 'place of birth of Angela Merkel?');
-            assert.equal(answer.result, 'Barmbek-Nord');
+            assert.equal(answer.result.label, 'Barmbek-Nord');
             done();
         });
     });
@@ -28,7 +28,7 @@ describe('basicQuestions', function() {
 
         app.answer('When was Angela Merkel born?', function(answer) {
             assert.equal(answer.interpretation, 'date of birth of Angela Merkel?');
-            assert.equal(answer.result, '1954-07-17T00:00:00Z');
+            assert.equal(answer.result.label, '1954-07-17T00:00:00Z');
             done();
         });
     });
@@ -37,7 +37,7 @@ describe('basicQuestions', function() {
 
         app.answer('When died Albert Einstein?', function(answer) {
             assert.equal(answer.interpretation, 'date of death of Albert Einstein?');
-            assert.equal(answer.result, '1955-04-18T00:00:00Z');
+            assert.equal(answer.result.label, '1955-04-18T00:00:00Z');
             done();
         });
     });
@@ -46,7 +46,7 @@ describe('basicQuestions', function() {
 
         app.answer('When did Albert Einstein die?', function(answer) {
             assert.equal(answer.interpretation, 'date of death of Albert Einstein?');
-            assert.equal(answer.result, '1955-04-18T00:00:00Z');
+            assert.equal(answer.result.label, '1955-04-18T00:00:00Z');
             done();
         });
     });
@@ -55,7 +55,7 @@ describe('basicQuestions', function() {
 
         app.answer('Where died Albert Einstein?', function(answer) {
             assert.equal(answer.interpretation, 'place of death of Albert Einstein?');
-            assert.equal(answer.result, 'Princeton');
+            assert.equal(answer.result.label, 'Princeton');
             done();
         });
     });
@@ -65,7 +65,7 @@ describe('basicQuestions', function() {
 
         app.answer('Who founded Siemens?', function(answer) {
             assert.equal(answer.interpretation, 'founder of Siemens?');
-            assert.equal(answer.result, 'Ernst Werner von Siemens');
+            assert.equal(answer.result.label, 'Ernst Werner von Siemens');
             done();
         });
     });
@@ -74,7 +74,7 @@ describe('basicQuestions', function() {
 
         app.answer('What is the population of Germany? ', function(answer) {
             assert.equal(answer.interpretation, 'population of Germany?');
-            assert.equal(answer.result, '81292400');
+            assert.equal(answer.result.label, '81292400');
             done();
         });
     });
@@ -83,7 +83,7 @@ describe('basicQuestions', function() {
 
         app.answer('What is Germany\'s population? ', function(answer) {
             assert.equal(answer.interpretation, 'population of Germany?');
-            assert(answer.result > '75000000');
+            assert(answer.result.label > '75000000');
             done();
         });
     });
@@ -93,7 +93,7 @@ describe('basicQuestions', function() {
 
         app.answer('Who is the president of Germany? ', function(answer) {
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'Joachim Gauck');
+            assert.equal(answer.result.label, 'Joachim Gauck');
             done();
         });
     });
@@ -102,7 +102,7 @@ describe('basicQuestions', function() {
 
         app.answer('Who is the head of government of Germany? ', function(answer) {
             assert.equal(answer.interpretation, 'head of government of Germany?');
-            assert.equal(answer.result, 'Angela Merkel');
+            assert.equal(answer.result.label, 'Angela Merkel');
             done();
         });
     });
@@ -112,7 +112,7 @@ describe('basicQuestions', function() {
         app.answer('Who is the head of state of Germany? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'Joachim Gauck');
+            assert.equal(answer.result.label, 'Joachim Gauck');
             done();
         });
     });
@@ -121,7 +121,7 @@ describe('basicQuestions', function() {
 
         app.answer('Who is Germany\'s head of government? ', function(answer) {
             assert.equal(answer.interpretation, 'head of government of Germany?');
-            assert.equal(answer.result, 'Angela Merkel');
+            assert.equal(answer.result.label, 'Angela Merkel');
             done();
         });
     });
@@ -132,7 +132,7 @@ describe('basicQuestions', function() {
         app.answer('What is the cast of Inception? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'cast member of Inception?');
-            assert.equal(answer.result, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
+            assert.equal(answer.result.label, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
             done();
         });
     });
@@ -143,7 +143,7 @@ describe('basicQuestions', function() {
         app.answer('Who is leading Germany? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'head of state of Germany?');
-            assert.equal(answer.result, 'The head of state of Germany is Joachim Gauck.');
+            assert.equal(answer.result.label, 'The head of state of Germany is Joachim Gauck.');
             done();
         });
     });

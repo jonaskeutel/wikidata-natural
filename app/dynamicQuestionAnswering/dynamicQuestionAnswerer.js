@@ -87,16 +87,17 @@ exports.answer = function(question, callback, fallback) {
                 callback(data);
                 return;
             }
-
-            var queryResult = jsonResponse.results.bindings[0];
+            
+            var queryResult = jsonResponse.results.bindings;
 
             data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
-            var answerIdPart = queryResult.object.value;
+            var answerIdPart = queryResult[0].object.value; // if there are multiple answers, just take the first for the moment...
             var id = answerIdPart.lastIndexOf('Q') !== -1 ? answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length) : null;
             var answerEntity = {
                 id: id,
-                label: queryResult.objectLabel.value
+                label: queryResult[0].objectLabel.value,
+                multipleAnswers: queryResult.length > 1 ? true : false
             };
 
             if (queryResult.genderLabel) {

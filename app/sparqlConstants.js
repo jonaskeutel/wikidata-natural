@@ -23,7 +23,5 @@ var ALL_PREFIXES = "PREFIX wikibase: <http://wikiba.se/ontology#>" +
 
 exports.genercicSingleStatement = function(itemId, propertyId) {
     var singleStatementQuery = GENERIC_SINGLE_STATEMENT.split("[ITEM_ID]").join(itemId).split("[PROPERTY_ID]").join(propertyId);
-    console.log(ALL_PREFIXES + singleStatementQuery);
-    // console.log( SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery}));
     return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
 };

@@ -74,7 +74,7 @@ describe('basicQuestions', function() {
 
         app.answer('What is the population of Germany? ', function(answer) {
             assert.equal(answer.interpretation, 'population of Germany?');
-            assert.equal(answer.result.label, '81292400');
+            assert(answer.result.label > '75000000');
             done();
         });
     });

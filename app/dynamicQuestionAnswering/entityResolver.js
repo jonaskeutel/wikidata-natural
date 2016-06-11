@@ -34,15 +34,11 @@ function returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId
     for (var i = questionId - 1; i > questionId - 4 && i >= 0; i--) {
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
-        console.log("considering: " + answerEntity.id + "-" + answerEntity.label + " (" + answerEntity.gender + ")" + "...");
         if (answerEntity.id && (gender === answerEntity.gender || (gender !== null && answerEntity.gender === "?"))) {
-            console.log("...taken");
             entityFound(null, answerEntity);
             return;
         }
-        console.log("considering: " + namedEntity.id + "-" + namedEntity.label + " (" + namedEntity.gender + ")" + "...");
         if (namedEntity.id && (gender === namedEntity.gender || (gender !== null && namedEntity.gender === "?"))) {
-            console.log("...taken");
             entityFound(null, namedEntity);
             return;
         }

@@ -3,7 +3,9 @@
 var querystring = require("querystring");
 
 var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel ?gender ?genderLabel WHERE { " +
-            "  wd:[ITEM_ID] wdt:[PROPERTY_ID] ?object . " +
+            "  wd:[ITEM_ID] p:[PROPERTY_ID] ?statement . " +
+            "  ?statement ps:[PROPERTY_ID] ?object . " +
+            "  FILTER NOT EXISTS { ?statement pq:P582 ?x } " +
             "  OPTIONAL {?object  wdt:P21 ?gender . } " +
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } " +
             "}";
@@ -15,9 +17,13 @@ var ALL_PREFIXES = "PREFIX wikibase: <http://wikiba.se/ontology#>" +
             "PREFIX wdt: <http://www.wikidata.org/prop/direct/> " +
             "PREFIX p: <http://www.wikidata.org/prop/> " +
             "PREFIX q: <http://www.wikidata.org/prop/qualifier/> " +
-            "PREFIX v: <http://www.wikidata.org/prop/statement/> ";
+            "PREFIX v: <http://www.wikidata.org/prop/statement/> " +
+            "PREFIX pq: <http://www.wikidata.org/prop/qualifier/> " +
+            "PREFIX ps: <http://www.wikidata.org/prop/statement/> ";
 
 exports.genercicSingleStatement = function(itemId, propertyId) {
-    var singleStatementQuery = GENERIC_SINGLE_STATEMENT.replace("[ITEM_ID]", itemId).replace("[PROPERTY_ID]", propertyId);
+    var singleStatementQuery = GENERIC_SINGLE_STATEMENT.split("[ITEM_ID]").join(itemId).split("[PROPERTY_ID]").join(propertyId);
+    console.log(ALL_PREFIXES + singleStatementQuery);
+    // console.log( SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery}));
     return SPARQL_ENDPOINT + querystring.stringify({query: ALL_PREFIXES + singleStatementQuery});
 };

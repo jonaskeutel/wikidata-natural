@@ -39,3 +39,16 @@ What instrument did Elvis play?;getPropertyValue;Elvis Presley;instrument;guitar
 What’s Marie Curie’s birth name?;getPropertyValue;Marie Curie;birth name;Maria Salomea Skłodowska (Polish)
 Where was Marie Curie buried?;getPropertyValue;Marie Curie;place of burial;Panthéon
 What’s Marie Curie’s Erdős number?;getPropertyValue;Marie Curie;Erdős number;7
+Who was Douglas Adams’ employer?;getPropertyValue;Douglas Adams;employer;BBC
+Whats the writing system of Esperanto?;getPropertyValue;Esperanto;writing system;Latin script
+Who created Esperanto?;getPropertyValue;Esperanto;creator;Ludwik Lejzer Zamenhof
+When was Esperanto created?;getPropertyValue;Esperanto;inception;26 July 1887
+What was Iron Man bysed on?;getPropertyValue;Iron Man;based on;Iron Man
+Whats a narrative location of Iron Man?;getPropertyValue;Iron Man;narrative location;Afghanistan
+Whats the aspect ratio of Iron Man?;getPropertyValue;Iron Man;2.35:1
+Whats the chemical formula or ethanol?getPropertyValue;ethanol;chemical formula;C₂H₆O
+What tonality is the Symphony No. 7 in?;getPropetyValue;Symphony No. 7;tonality;A major
+Who was the Symphony No. 7 dedicated to?;getPropertyValue;Symphony No. 7;dedicated to;Moritz Reichsgraf von Fries
+Who wrote Mister President?;getPropertyValue;Mister President;author;Miguel Ángel Asturias
+What genre is Mister President?;getPropertyValue;Mister President;genre;dictator novel
+What was the Hessian Broadcasting Corporation?;getDescription;Hessian Broadcasting Corporation;None;German public broadcaster

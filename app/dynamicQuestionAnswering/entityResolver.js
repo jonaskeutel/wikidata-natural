@@ -55,7 +55,7 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     var gender;
     var namedEntityString = "";
     for (var i = 0; i < taggedWords.length; i++) {
-        if (taggedWords[i].entType !== '') {
+        if (taggedWords[i].entType !== '' || taggedWords[i].tag.startsWith("NNP")) {
             namedEntityString += taggedWords[i].orth + " ";
             positions.push(i);
             type = taggedWords[i].entType;

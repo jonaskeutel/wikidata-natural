@@ -1,6 +1,9 @@
 "use strict";
 
 exports.formatAnswer = function(property, namedEntity, result) {
+    if (result.objectDesc) {
+        return result.objectDesc.value;
+    }
 	var answer = "The " + property.label + " of " + namedEntity.label + formatIs(result) + formatResult(result) + ".";
 	return answer;
 };

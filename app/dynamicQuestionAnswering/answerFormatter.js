@@ -59,7 +59,7 @@ function timeSpanSince(aDate) {
 	var oneMonth = 30.44 * oneDay;
 	var oneYear = 365.25 * oneDay;
 
-	var timeSpanString = " (about ";
+	var timeSpanString = " (";
 
 	var diff = Math.abs(new Date().getTime() - aDate.getTime());
 	var diffNormalized = diff;

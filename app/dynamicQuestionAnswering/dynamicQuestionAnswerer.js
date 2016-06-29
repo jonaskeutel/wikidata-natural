@@ -23,8 +23,7 @@ exports.answer = function(question, callback, fallback) {
     var questionNormalized = normalizeInterpunctuation(question);
 
     spacyClient.getSpacyTaggedWords(questionNormalized, function(spacyTaggedWords) {
-        entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityFound);
-        propertyResolver.findPropertyId(spacyTaggedWords, questionId, onPropertyFound);
+        entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityDetected, onEntityFound);
     });
 
     function onEntityFound(err, foundEntity) {
@@ -35,6 +34,10 @@ exports.answer = function(question, callback, fallback) {
         if (bothResultsArrived()) {
             buildQuery();
         }
+    }
+
+    function onEntityDetected(taggedWords, position) {
+        propertyResolver.findPropertyId(taggedWords, questionId, position, onPropertyFound);
     }
 
     function onPropertyFound(err, foundProperty) {
@@ -67,9 +70,13 @@ exports.answer = function(question, callback, fallback) {
         });
 
         function onQueryResult(queryData) {
-            var data = {};
+            var data = {
+                property: property,
+                namedEntity: namedEntity,
+                result: {},
+                interpretation: property.label + " of " + namedEntity.label + "?"
+            };
 
-            data.interpretation = property.label + " of " + namedEntity.label + "?";
             conversationHistory.addInterpretation(data.interpretation, questionId);
 
             var jsonResponse = JSON.parse(decoder.write(queryData));
@@ -83,15 +90,27 @@ exports.answer = function(question, callback, fallback) {
 
             var queryResult = jsonResponse.results.bindings[0];
 
-            data.result = queryResult.objectLabel.value;
             data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
             var answerIdPart = queryResult.object.value;
+            var id = answerIdPart.lastIndexOf('Q') !== -1 ? answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length) : null;
             var answerEntity = {
-                id: answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length),
+                id: id,
                 label: queryResult.objectLabel.value
             };
+
+            if (queryResult.genderLabel) {
+                answerEntity.gender = queryResult.genderLabel.value;
+            } else if (id) {
+                answerEntity.gender = 'neutr';
+            } else {
+                answerEntity.gender = null;
+            }
+            console.log(answerEntity);
+            data.result = answerEntity;
             conversationHistory.addAnswerEntity(answerEntity, questionId);
+
+            console.log(data);
             callback(data);
         }
     }

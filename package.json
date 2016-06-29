@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"node app.js\" \"python spacyServer/spacyServer.py\""
+    "start": "concurrently \"nodemon app.js\" \"python spacyServer/spacyServer.py\""
   },
   "dependencies": {
     "async": "^1.5.2",

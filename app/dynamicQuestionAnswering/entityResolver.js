@@ -18,7 +18,7 @@ exports.findNamedEntity = function(taggedWords, questionId, namedEntityDetected,
             returnHistoryEntityInstead(entityFound, questionId, namedEntityDetected, taggedWords);
             return;
         }
-        entityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type});
+        entityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
     });
 };
 
@@ -54,13 +54,33 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     var type;
     var gender;
     var namedEntityString = "";
+    var entitySpecifierString = "";
+    var entitySpecifierType;
     for (var i = 0; i < taggedWords.length; i++) {
         if (taggedWords[i].entType !== '') {
-            namedEntityString += taggedWords[i].orth + " ";
-            positions.push(i);
-            type = taggedWords[i].entType;
+            if (taggedWords[i].entType === 'DATE') {
+                entitySpecifierString += taggedWords[i].orth + " ";
+                entitySpecifierType = taggedWords[i].entType;
+            } else {
+                namedEntityString += taggedWords[i].orth + " ";
+                positions.push(i);
+                type = taggedWords[i].entType;
+            }
         }
     }
+    var entitySpecifier; 
+    if(entitySpecifierType === 'DATE'){
+        if(entitySpecifierString.trim().toLowerCase() == 'today'){
+            entitySpecifier = new Date();
+        } else{
+            entitySpecifier= new Date(entitySpecifierString);
+        }
+    } else {
+        entitySpecifier = entitySpecifierString;
+    }
+    
+    console.log('entitySpecifier')
+    console.log(entitySpecifier)
     namedEntityDetected(taggedWords, positions);
     if (type === "PERSON") {
         gender = "?";
@@ -70,7 +90,9 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     return {
         string: namedEntityString.trim(),
         gender: gender,
-        type: type
+        type: type, 
+        specifier: entitySpecifier, 
+        specifierType: entitySpecifierType
     };
 }
 

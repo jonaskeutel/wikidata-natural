@@ -2,13 +2,15 @@
 
 var querystring = require("querystring");
 
-var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel ?gender ?genderLabel WHERE { " +
+var GENERIC_SINGLE_STATEMENT = "SELECT ?object ?objectLabel ?gender ?genderLabel ?date (YEAR(?date) as ?year)WHERE { " +
             "  wd:[ITEM_ID] p:[PROPERTY_ID] ?statement . " +
             "  ?statement ps:[PROPERTY_ID] ?object . " +
+            "  OPTIONAL {?statement pq:P585 ?date. } " +
             "  FILTER NOT EXISTS { ?statement pq:P582 ?x } " +
             "  OPTIONAL {?object  wdt:P21 ?gender . } " +
             "  SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' . } " +
-            "}";
+            "}" + 
+            "ORDER BY ?year ?objectLabel";
 
 var SPARQL_ENDPOINT = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?format=json&";
 

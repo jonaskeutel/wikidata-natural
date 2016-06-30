@@ -89,8 +89,33 @@ exports.answer = function(question, callback, fallback) {
             }
 
             var queryResult = jsonResponse.results.bindings;
-            if (property.label === "population") {
-                data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[queryResult.length - 1]])
+            if (namedEntity.specifierType === 'DATE') {
+                var answerFound = false;
+                var nearestYearIndex;
+                var parsedYear = (new Date(namedEntity.specifier)).getFullYear();
+                if(parsedYear < queryResult[0]['year'].value){
+                    data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[0]]);
+                } else if(parsedYear > queryResult[queryResult.length - 1]['year'].value) {
+                    data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[queryResult.length - 1]]);
+                }
+                else{
+                    for(var i = 0; i < queryResult.length; i++){
+                        if(parsedYear == queryResult[i]['year'].value){
+                            data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[i]]);
+                            answerFound = true;
+                            break;
+                        } else {
+                            if(parsedYear > queryResult[i]['year'].value) {
+                                nearestYearIndex = i;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    if(!answerFound){
+                        data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[nearestYearIndex]]);
+                    }
+                }
             } else {
                 data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             }

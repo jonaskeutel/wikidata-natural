@@ -32,11 +32,18 @@ function formatIs(result) {
 }
 
 function formatResult(result) {
+	var formattedAnswer;
 	var formatFunction = selectFunctionForDatatype(datatypeOf(result));
 	if (formatFunction) {
-		return formatFunction(result.objectLabel.value);
+		formattedAnswer = formatFunction(result.objectLabel.value);
 	}
-	return result.objectLabel.value;
+	else {
+		formattedAnswer = result.objectLabel.value;
+	}
+	if (result.year) {
+		return formattedAnswer + ' (' + result.year.value + ')'
+	}
+	return formattedAnswer
 }
 
 function datatypeOf(result) {

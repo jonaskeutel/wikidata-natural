@@ -127,11 +127,10 @@ exports.answer = function(question, callback, fallback) {
                 label: queryResult[queryResult.length - 1].objectLabel.value,
                 multipleAnswers: queryResult.length > 1 ? true : false
             };
-
-            if (queryResult.genderLabel) {
-                answerEntity.gender = queryResult.genderLabel.value;
+            if (queryResult[0].genderLabel) {
+                answerEntity.gender = queryResult[0].genderLabel.value;
             } else if (id) {
-                answerEntity.gender = 'neutr';
+                answerEntity.gender = 'neuter';
             } else {
                 answerEntity.gender = null;
             }

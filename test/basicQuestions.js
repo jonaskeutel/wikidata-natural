@@ -127,12 +127,10 @@ describe('basicQuestions', function() {
     });
 
     it('returns correct answer for what is the cast question', function(done) {
-        this.skip();
-        // NER doesn't work for Inception anymore... -.-
         app.answer('What is the cast of Inception? ', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'cast member of Inception?');
-            assert.equal(answer.result.label, 'Leonardo DiCaprio, Ken Watanabe, Joseph Gordon-Levitt, Marion Cotillard, Ellen Page etc.');
+            assert.equal(answer.answer, 'The cast members of Inception are Cillian Murphy, Dileep Rao, Ellen Page, Joseph Gordon-Levitt, Ken Watanabe, Leonardo DiCaprio, Lukas Haas, Marion Cotillard, Michael Caine, Pete Postlethwaite, Tom Berenger and Tom Hardy.');
             done();
         });
     });
@@ -142,7 +140,7 @@ describe('basicQuestions', function() {
         app.answer('What is the cast of Vaa Arugil Vaa?', function(answer) {
             console.log(answer);
             assert.equal(answer.interpretation, 'cast member of Vaa Arugil Vaa?');
-            assert.equal(answer.answer, 'The cast members of Vaa Arugil Vaa are Ramya Krishnan and Raja.');
+            assert.equal(answer.answer, 'The cast members of Vaa Arugil Vaa are Raja and Ramya Krishnan.');
             done();
         });
     });

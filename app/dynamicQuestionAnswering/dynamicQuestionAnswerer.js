@@ -21,6 +21,7 @@ exports.answer = function(question, callback, fallback) {
     var errorMessages = "";
 
     var questionNormalized = normalizeInterpunctuation(question);
+    questionNormalized = replaceWhatsByWhatIs(questionNormalized);
 
     spacyClient.getSpacyTaggedWords(questionNormalized, function(spacyTaggedWords) {
         entityResolver.findNamedEntity(spacyTaggedWords, questionId, onEntityDetected, onEntityFound);
@@ -146,4 +147,21 @@ exports.answer = function(question, callback, fallback) {
 
 function normalizeInterpunctuation(question) {
     return question.replace(/’|´|`/g, '\'');
+}
+
+function replaceWhatsByWhatIs(question) {
+    question = question.replace(/what\'s/g, 'what is');
+    question = question.replace(/What\'s/g, 'What is');
+    question = question.replace(/who\'s/g, 'who is');
+    question = question.replace(/Who\'s/g, 'Who is');
+    question = question.replace(/what\'re/g, 'what are');
+    question = question.replace(/What\'re/g, 'What are');
+    question = question.replace(/Who\'re/g, 'Who are');
+    question = question.replace(/who\'re/g, 'who are');
+    question = question.replace(/whats/g, 'what is');
+    question = question.replace(/Whats/g, 'What is');
+    question = question.replace(/whos/g, 'who is');
+    question = question.replace(/Whos/g, 'Who is');
+
+    return question;
 }

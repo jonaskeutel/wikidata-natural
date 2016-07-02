@@ -1,10 +1,20 @@
 "use strict";
 
 exports.formatAnswer = function(property, namedEntity, result) {
-    if (result.objectDesc) {
-        return result.objectDesc.value;
+    if (result[0].objectDesc) {
+        return result[0].objectDesc.value;
     }
-	var answer = "The " + property.label + " of " + namedEntity.label + formatIs(result) + formatResult(result) + ".";
+	var answer;
+    if (result.length === 1) {
+        answer = "The " + property.label + " of " + namedEntity.label + formatIs(result[0]) + formatResult(result[0]) + ".";
+    } else {
+        answer = "The " + property.label + "s of " + namedEntity.label + formatIs(result);
+        for (var i = 0; i < result.length - 1; i++) {
+            answer += formatResult(result[i]) + ", ";
+        }
+        answer = answer.slice(0, answer.length - 2)
+        answer += " and " + formatResult(result[result.length - 1]) + ".";
+    }
 	return answer;
 };
 
@@ -18,15 +28,25 @@ function formatIs(result) {
 			return " will be on ";
 		}
 	}
-	return " is ";
+    if (result.length > 1) {
+        return " are ";
+    }
+    return " is "
 }
 
 function formatResult(result) {
+	var formattedAnswer;
 	var formatFunction = selectFunctionForDatatype(datatypeOf(result));
 	if (formatFunction) {
-		return formatFunction(result.objectLabel.value);
+		formattedAnswer = formatFunction(result.objectLabel.value);
 	}
-	return result.objectLabel.value;
+	else {
+		formattedAnswer = result.objectLabel.value;
+	}
+	if (result.year) {
+		return formattedAnswer + ' (' + result.year.value + ')'
+	}
+	return formattedAnswer
 }
 
 function datatypeOf(result) {
@@ -62,7 +82,7 @@ function timeSpanSince(aDate) {
 	var oneMonth = 30.44 * oneDay;
 	var oneYear = 365.25 * oneDay;
 
-	var timeSpanString = " (about ";
+	var timeSpanString = " (";
 
 	var diff = Math.abs(new Date().getTime() - aDate.getTime());
 	var diffNormalized = diff;

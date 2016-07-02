@@ -30,6 +30,7 @@ exports.answer = function(question, callback, fallback) {
     var errorMessages = "";
 
     var questionNormalized = normalizeInterpunctuation(question);
+    questionNormalized = replaceWhatsByWhatIs(questionNormalized);
 
     spacyClient.getSpacyTaggedWords(questionNormalized, function(spacyTaggedWords) {
         if (isDescriptionQuestion(spacyTaggedWords)) {
@@ -115,25 +116,25 @@ exports.answer = function(question, callback, fallback) {
                 return;
             }
 
-            var queryResult = jsonResponse.results.bindings[0];
+            var queryResult = jsonResponse.results.bindings;
             console.log(queryResult);
-            data.interpretation = queryResult.objectDesc ? "TODO..." : property.label + " of " + namedEntity.label + "?";
+            data.interpretation = queryResult[0].objectDesc ? queryResult[0].objectLabel.value : property.label + " of " + namedEntity.label + "?";
 
             conversationHistory.addInterpretation(data.interpretation, questionId);
 
             data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             conversationHistory.addAnswer(data.answer, questionId);
 
-            if (!queryResult.objectDesc) {
-                var answerIdPart = queryResult.object.value;
+            if (!queryResult[0].objectDesc) {
+                var answerIdPart = queryResult[0].object.value;
                 var id = answerIdPart.lastIndexOf('Q') !== -1 ? answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length) : null;
                 var answerEntity = {
                     id: id,
-                    label: queryResult.objectLabel.value
+                    label: queryResult[0].objectLabel.value
                 };
 
-                if (queryResult.genderLabel) {
-                    answerEntity.gender = queryResult.genderLabel.value;
+                if (queryResult[0].genderLabel) {
+                    answerEntity.gender = queryResult[0].genderLabel.value;
                 } else if (id) {
                     answerEntity.gender = 'neutr';
                 } else {
@@ -142,17 +143,61 @@ exports.answer = function(question, callback, fallback) {
                 console.log(answerEntity);
                 data.result = answerEntity;
                 conversationHistory.addAnswerEntity(answerEntity, questionId);
+
+                if (namedEntity.specifierType === 'DATE') {
+                    var answerFound = false;
+                    var nearestYearIndex;
+                    var parsedYear = (new Date(namedEntity.specifier)).getFullYear();
+                    if(parsedYear < queryResult[0]['year'].value){
+                        data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[0]]);
+                    } else if(parsedYear > queryResult[queryResult.length - 1]['year'].value) {
+                        data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[queryResult.length - 1]]);
+                    }
+                    else{
+                        for(var i = 0; i < queryResult.length; i++){
+                            if(parsedYear == queryResult[i]['year'].value){
+                                data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[i]]);
+                                answerFound = true;
+                                break;
+                            } else {
+                                if(parsedYear > queryResult[i]['year'].value) {
+                                    nearestYearIndex = i;
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                        if(!answerFound){
+                            data.answer = answerFormatter.formatAnswer(property, namedEntity, [queryResult[nearestYearIndex]]);
+                        }
+                    }
+                }
+            } else {
+                data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
+                var answerIdPart = queryResult[queryResult.length - 1].objectLabel.value; // if there are multiple answers, just take the last for the moment...
+                conversationHistory.addAnswer(data.answer, questionId);
+                var id = answerIdPart.lastIndexOf('Q') !== -1 ? answerIdPart.substring(answerIdPart.lastIndexOf('Q'), answerIdPart.length) : null;
+                var answerEntity = {
+                    id: id,
+                    label: queryResult[queryResult.length - 1].objectLabel.value,
+                    multipleAnswers: queryResult.length > 1 ? true : false
+                };
+                if (queryResult[0].genderLabel) {
+                    answerEntity.gender = queryResult[0].genderLabel.value;
+                } else if (id) {
+                    answerEntity.gender = 'neuter';
+                } else {
+                    answerEntity.gender = null;
+                }
+                conversationHistory.addAnswerEntity(answerEntity, questionId);
             }
 
-            console.log(data);
+            console.log(conversationHistory.messages()[conversationHistory.messages().length - 1]);
             callback(data);
         }
     }
 };
 
-function normalizeInterpunctuation(question) {
-    return question.replace(/’|´|`/g, '\'');
-}
 
 function isDescriptionQuestion(taggedWords) {
     console.log("Compare: ");
@@ -189,4 +234,25 @@ function isDescriptionQuestion(taggedWords) {
         }
     }
     return false;
+}
+
+function replaceWhatsByWhatIs(question) {
+    question = question.replace(/what\'s/g, 'what is');
+    question = question.replace(/What\'s/g, 'What is');
+    question = question.replace(/who\'s/g, 'who is');
+    question = question.replace(/Who\'s/g, 'Who is');
+    question = question.replace(/what\'re/g, 'what are');
+    question = question.replace(/What\'re/g, 'What are');
+    question = question.replace(/Who\'re/g, 'Who are');
+    question = question.replace(/who\'re/g, 'who are');
+    question = question.replace(/whats/g, 'what is');
+    question = question.replace(/Whats/g, 'What is');
+    question = question.replace(/whos/g, 'who is');
+    question = question.replace(/Whos/g, 'Who is');
+
+    return question;
+}
+
+function normalizeInterpunctuation(question) {
+    return question.replace(/’|´|`/g, '\'');
 }

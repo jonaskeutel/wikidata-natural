@@ -1,7 +1,17 @@
 "use strict";
 
 exports.formatAnswer = function(property, namedEntity, result) {
-	var answer = "The " + property.label + " of " + namedEntity.label + formatIs(result) + formatResult(result) + ".";
+	var answer;
+    if (result.length === 1) {
+        answer = "The " + property.label + " of " + namedEntity.label + formatIs(result[0]) + formatResult(result[0]) + ".";
+    } else {
+        answer = "The " + property.label + "s of " + namedEntity.label + formatIs(result);
+        for (var i = 0; i < result.length - 1; i++) {
+            answer += formatResult(result[i]) + ", ";
+        }
+        answer = answer.slice(0, answer.length - 2)
+        answer += " and " + formatResult(result[result.length - 1]) + ".";
+    }
 	return answer;
 };
 
@@ -15,15 +25,25 @@ function formatIs(result) {
 			return " will be on ";
 		}
 	}
-	return " is ";
+    if (result.length > 1) {
+        return " are ";
+    }
+    return " is "
 }
 
 function formatResult(result) {
+	var formattedAnswer;
 	var formatFunction = selectFunctionForDatatype(datatypeOf(result));
 	if (formatFunction) {
-		return formatFunction(result.objectLabel.value);
+		formattedAnswer = formatFunction(result.objectLabel.value);
 	}
-	return result.objectLabel.value;
+	else {
+		formattedAnswer = result.objectLabel.value;
+	}
+	if (result.year) {
+		return formattedAnswer + ' (' + result.year.value + ')'
+	}
+	return formattedAnswer
 }
 
 function datatypeOf(result) {

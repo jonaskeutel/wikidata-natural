@@ -71,10 +71,19 @@ describe('basicQuestions', function() {
     });
 
     it('returns correct answer for what is the population question', function(done) {
-
+        this.skip();
         app.answer('What is the population of Germany? ', function(answer) {
             assert.equal(answer.interpretation, 'population of Germany?');
-            assert(answer.result.label > '75000000');
+            assert(parseInt(answer.result.label) > 75000000);
+            done();
+        });
+    });
+
+    it('returns correct answer for what is the population question in 1970', function(done) {
+        app.answer('What is the population of Germany in 1970? ', function(answer) {
+            assert.equal(answer.interpretation, 'population of Germany?');
+            console.log(answer.result);
+            assert(answer.answer == 'The population of Germany is 78 069 000 (1970).');
             done();
         });
     });

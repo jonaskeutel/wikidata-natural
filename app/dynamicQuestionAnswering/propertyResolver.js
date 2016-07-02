@@ -24,7 +24,7 @@ exports.findPropertyId = function(taggedWords, questionId, positions, callback) 
         property = returnHistoryPropertyInstead(questionId);
     }
     if (!property || !property.id) {
-        callback("Could not find a property in your query nor in conversation history.");
+        callback("Could not find a property in your question nor in conversation history.");
         return;
     }
     console.log("Property lookup returned", property.id, "-", property.label);

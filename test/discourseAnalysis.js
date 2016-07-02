@@ -26,13 +26,13 @@ describe('discourseAnalysis', function() {
 
     it('distinguish gender for last question', function(done) {
         app.answer('Who is the president of Germany?', function(answ) {
-            app.answer('Where was he born?', function(answer) {
-                assert.equal(answer.result.label, 'Rostock');
-                app.answer('What is its capital?', function(answer) {
-                    assert.equal(answer.result.label, 'Berlin');
-                    app.answer('What is his capital?', function(answer) {
-                        assert.equal(answer.answer, "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
-                                        "You would do me a big favor if you could look it up and add it to Wikidata.");
+            app.answer('What is its capital?', function(answer) {
+                assert.equal(answer.result.label, 'Berlin');
+                app.answer('What is his capital?', function(answer) {
+                    assert.equal(answer.answer, "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +
+                                    "You would do me a big favor if you could look it up and add it to Wikidata.");
+                    app.answer('Where was he born?', function(answer) {
+                        assert.equal(answer.result.label, 'Rostock');
                         done();
                     });
                 });

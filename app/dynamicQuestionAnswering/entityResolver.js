@@ -29,24 +29,27 @@ function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId,
         return;
     }
 
-    var gender = detectGender(taggedWords, onEntityDetected);
+    var queryGender = detectGender(taggedWords, onEntityDetected);
 
     for (var i = questionId - 1; i > questionId - 4 && i >= 0; i--) {
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
-        if (answerEntity.id && (gender === answerEntity.gender || (gender !== null && answerEntity.gender === "?"))) {
+        if (answerEntity && answerEntity.id && isMatchingGender(answerEntity.gender, queryGender)) {
             onEntityFound(null, answerEntity);
             return;
         }
-        if (namedEntity.id && (gender === namedEntity.gender || (gender !== null && namedEntity.gender === "?"))) {
+        if (namedEntity && namedEntity.id && isMatchingGender(namedEntity.gender, queryGender)) {
             onEntityFound(null, namedEntity);
             return;
         }
     }
 
-    console.log("Didn't find namedEntity in question; using instead: ", conversationHistory.messages()[questionId - 1].answerEntity);
-    onEntityFound(null, conversationHistory.messages()[questionId - 1].answerEntity);
+    onEntityFound("Could not find an entity in your question nor in conversation history.");
+}
 
+function isMatchingGender(entityGender, queryGender) {
+    var isSubstring = (entityGender.indexOf(queryGender) !== -1);
+    return isSubstring;
 }
 
 function extractNamedEntity(taggedWords, onEntityDetected) {
@@ -81,7 +84,7 @@ function extractNamedEntity(taggedWords, onEntityDetected) {
 
     onEntityDetected(taggedWords, positions);
     if (type === "PERSON") {
-        gender = "?";
+        gender = 'maleORfemale';
     } else {
         gender = 'neuter';
     }

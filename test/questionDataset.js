@@ -10,7 +10,7 @@ describe('questionDataset', function() {
 
     it('correctly answers some of the test questions', function(done) {
 
-		fs.readFile(__dirname + '/wikidata-questions-fewer.txt', 'utf8', function (err, data) {
+		fs.readFile(__dirname + '/wikidata-questions.txt', 'utf8', function (err, data) {
 			var questionsAsked = 0;
 			var questionsAnswered = 0;
 			var correctInterpretations = 0;

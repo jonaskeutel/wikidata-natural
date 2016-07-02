@@ -49,6 +49,4 @@ Whats the aspect ratio of Iron Man?;getPropertyValue;Iron Man;aspect ratio;2.35:
 Whats the chemical formula or ethanol?getPropertyValue;ethanol;chemical formula;C₂H₆O
 What tonality is the Symphony No. 7 in?;getPropetyValue;Symphony No. 7;tonality;A major
 Who was the Symphony No. 7 dedicated to?;getPropertyValue;Symphony No. 7;dedicated to;Moritz Reichsgraf von Fries
-Who wrote Mister President?;getPropertyValue;Mister President;author;Miguel Ángel Asturias
-What genre is Mister President?;getPropertyValue;Mister President;genre;dictator novel
 What was the Hessian Broadcasting Corporation?;getDescription;Hessian Broadcasting Corporation;None;German public broadcaster

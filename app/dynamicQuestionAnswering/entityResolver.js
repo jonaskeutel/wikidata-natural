@@ -57,7 +57,7 @@ function extractNamedEntity(taggedWords, onEntityDetected) {
     var entitySpecifierString = "";
     var entitySpecifierType;
     for (var i = 0; i < taggedWords.length; i++) {
-        if (taggedWords[i].entType !== '') {
+        if (taggedWords[i].entType !== '' || taggedWords[i].tag.startsWith("NNP")) {
             if (taggedWords[i].entType === 'DATE') {
                 entitySpecifierString += taggedWords[i].orth + " ";
                 entitySpecifierType = taggedWords[i].entType;

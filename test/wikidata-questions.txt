@@ -1,12 +1,12 @@
-What is the highest point in Norway?;getPropertyValue;highest point;Norway;Galdhøpiggen
-Is Deshauna Barber female?;comparePropertyValue;sex or gender;Deshauna Barber;true
-What is the gender of Deshauna Barber?;getPropertyValue;female
-Which country is Deshauna Barber a citizen of?;getPropertyValue;country of citizenship;United States of America
+What is the highest point in Norway?;getPropertyValue;Norway;highest point;Galdhøpiggen
+Is Deshauna Barber female?;comparePropertyValue;Deshauna Barber;sex or gender;true
+What is the gender of Deshauna Barber?;getPropertyValue;Deshauna Barber;sex or gender;female
+Which country is Deshauna Barber a citizen of?;getPropertyValue;Deshauna Barber;country of citizenship;United States of America
 Was the Gotthard Base Tunnel opened before 2016?;comparePropertyValue;Gotthard Base Tunnel;date of official opening;false
 Where is the Gotthard Base Tunnel?;getPropertyValue;Gotthard Base Tunnel;coordinate location;46°36'0"N, 8°45'54"E
 Does the Gotthard Base Tunnel have a website?;getPropertyValue;Gotthard Base Tunnel;official website;https://www.alptransit-portal.ch/en/landingpage/
 Who is Mikhail Bulgakov?;getDescription;Mikhail Bulgakov;None;Russian author primarily known for his novel "Master and Margarita"
-What was the Soviet Union’s motto?;getPropertyValue;motto;Workers of the world, unite!
+What was the Soviet Union’s motto?;getPropertyValue;Soviet Union;motto;Workers of the world, unite!
 What country’s TLD is .su?;getPropertyValue;.su;country;Soviet Union
 Was the Soviet Union a federal republic?;comparePropertyValue;Soviet Union;instance of;true
 What currency was used in the Soviet Union?;getPropertyValue;Soviet Union;currency;Soviet ruble
@@ -17,7 +17,7 @@ On what side of the road do you drive in Turkey?;getPropertyValue;Turkey;driving
 Who is the mother of Muhammad Ali?;getPropertyValue;Muhammad Ali;mother;Odessa Grady Clay
 How many Children did Muhammad Ali have?;getPropertyValue;Muhammad Ali;number of children;9
 What does Hervé Baudry do?;getPropertyValue;Hervé Baudry;occupation;caicaturist
-In what country is Montmartre?;getPropertyValue;country;France
+In what country is Montmartre?;getPropertyValue;Montmartre;country;France
 When was Paris founded?;getPropertyValue;Paris;inception;300 BCE
 Does Paris share a border with Gentilly?;comparePropertyValue;Paris;shares border with;true
 What’s the zip code of Paris?;getPropertyValue;Paris;postal code;75116
@@ -39,3 +39,14 @@ What instrument did Elvis play?;getPropertyValue;Elvis Presley;instrument;guitar
 What’s Marie Curie’s birth name?;getPropertyValue;Marie Curie;birth name;Maria Salomea Skłodowska (Polish)
 Where was Marie Curie buried?;getPropertyValue;Marie Curie;place of burial;Panthéon
 What’s Marie Curie’s Erdős number?;getPropertyValue;Marie Curie;Erdős number;7
+Who was Douglas Adams’ employer?;getPropertyValue;Douglas Adams;employer;BBC
+Whats the writing system of Esperanto?;getPropertyValue;Esperanto;writing system;Latin script
+Who created Esperanto?;getPropertyValue;Esperanto;creator;Ludwik Lejzer Zamenhof
+When was Esperanto created?;getPropertyValue;Esperanto;inception;26 July 1887
+What was Iron Man bysed on?;getPropertyValue;Iron Man;based on;Iron Man
+Whats a narrative location of Iron Man?;getPropertyValue;Iron Man;narrative location;Afghanistan
+Whats the aspect ratio of Iron Man?;getPropertyValue;Iron Man;aspect ratio;2.35:1
+Whats the chemical formula or ethanol?getPropertyValue;ethanol;chemical formula;C₂H₆O
+What tonality is the Symphony No. 7 in?;getPropetyValue;Symphony No. 7;tonality;A major
+Who was the Symphony No. 7 dedicated to?;getPropertyValue;Symphony No. 7;dedicated to;Moritz Reichsgraf von Fries
+What was the Hessian Broadcasting Corporation?;getDescription;Hessian Broadcasting Corporation;None;German public broadcaster

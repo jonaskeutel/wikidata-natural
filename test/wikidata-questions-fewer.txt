@@ -1,0 +1,7 @@
+What is the highest point in Norway?;getPropertyValue;Norway;highest point;Galdhøpiggen
+Is Deshauna Barber female?;comparePropertyValue;Deshauna Barber;sex or gender;true
+What is the gender of Deshauna Barber?;getPropertyValue;Deshauna Barber;sex or gender;female
+Which country is Deshauna Barber a citizen of?;getPropertyValue;Deshauna Barber;country of citizenship;United States of America
+Was the Gotthard Base Tunnel opened before 2016?;comparePropertyValue;Gotthard Base Tunnel;date of official opening;false
+Where is the Gotthard Base Tunnel?;getPropertyValue;Gotthard Base Tunnel;coordinate location;46°36'0"N, 8°45'54"E
+Does the Gotthard Base Tunnel have a website?;getPropertyValue;Gotthard Base Tunnel;official website;https://www.alptransit-portal.ch/en/landingpage/

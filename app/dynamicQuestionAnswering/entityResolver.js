@@ -4,52 +4,52 @@ var wikidataIdLookup = require('./../wikidataIdLookup');
 var conversationHistory = require('./../conversationHistory.js');
 
 
-exports.findNamedEntity = function(taggedWords, questionId, namedEntityDetected, entityFound) {
-    var namedEntity = extractNamedEntity(taggedWords, namedEntityDetected);
+exports.findNamedEntity = function(taggedWords, questionId, onEntityDetected, onEntityFound) {
+    var namedEntity = extractNamedEntity(taggedWords, onEntityDetected);
 
     if (namedEntity.string === "") {
-        returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId, taggedWords);
+        returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId, taggedWords);
         return;
     }
     console.log("Extracted Named Entity:", namedEntity.string.trim());
 
     wikidataIdLookup.getWikidataId({searchText: namedEntity.string.trim()}, function(err, data) {
         if (err) {
-            returnHistoryEntityInstead(entityFound, questionId, namedEntityDetected, taggedWords);
+            returnHistoryEntityInstead(onEntityFound, questionId, onEntityDetected, taggedWords);
             return;
         }
-        entityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
+        onEntityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
     });
 };
 
 
-function returnHistoryEntityInstead(entityFound, namedEntityDetected, questionId, taggedWords) {
+function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId, taggedWords) {
     if (conversationHistory.wasEmpty()) {
-        entityFound("Could not find named entity in question or conversation history.");
+        onEntityFound("Could not find an entity in your question nor in conversation history.");
         return;
     }
 
-    var gender = detectGender(taggedWords, namedEntityDetected);
+    var gender = detectGender(taggedWords, onEntityDetected);
 
     for (var i = questionId - 1; i > questionId - 4 && i >= 0; i--) {
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
         if (answerEntity.id && (gender === answerEntity.gender || (gender !== null && answerEntity.gender === "?"))) {
-            entityFound(null, answerEntity);
+            onEntityFound(null, answerEntity);
             return;
         }
         if (namedEntity.id && (gender === namedEntity.gender || (gender !== null && namedEntity.gender === "?"))) {
-            entityFound(null, namedEntity);
+            onEntityFound(null, namedEntity);
             return;
         }
     }
 
     console.log("Didn't find namedEntity in question; using instead: ", conversationHistory.messages()[questionId - 1].answerEntity);
-    entityFound(null, conversationHistory.messages()[questionId - 1].answerEntity);
+    onEntityFound(null, conversationHistory.messages()[questionId - 1].answerEntity);
 
 }
 
-function extractNamedEntity(taggedWords, namedEntityDetected) {
+function extractNamedEntity(taggedWords, onEntityDetected) {
     var positions = [];
     var type;
     var gender;
@@ -68,7 +68,7 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
             }
         }
     }
-    var entitySpecifier; 
+    var entitySpecifier;
     if(entitySpecifierType === 'DATE'){
         if(entitySpecifierString.trim().toLowerCase() == 'today'){
             entitySpecifier = new Date();
@@ -78,10 +78,8 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     } else {
         entitySpecifier = entitySpecifierString;
     }
-    
-    console.log('entitySpecifier')
-    console.log(entitySpecifier)
-    namedEntityDetected(taggedWords, positions);
+
+    onEntityDetected(taggedWords, positions);
     if (type === "PERSON") {
         gender = "?";
     } else {
@@ -90,33 +88,31 @@ function extractNamedEntity(taggedWords, namedEntityDetected) {
     return {
         string: namedEntityString.trim(),
         gender: gender,
-        type: type, 
-        specifier: entitySpecifier, 
+        type: type,
+        specifier: entitySpecifier,
         specifierType: entitySpecifierType
     };
 }
 
-function detectGender(taggedWords, namedEntityDetected) {
+function detectGender(taggedWords, onEntityDetected) {
     for (var i = 0; i < taggedWords.length; i++) {
         switch (taggedWords[i].orth) {
             case 'he':
             case 'him':
             case 'his':
-                namedEntityDetected(taggedWords, [i]);
+                onEntityDetected(taggedWords, [i]);
                 return 'male';
             case 'she':
             case 'her':
             case 'hers':
-                namedEntityDetected(taggedWords, [i]);
+                onEntityDetected(taggedWords, [i]);
                 return 'female';
             case 'it':
             case 'its':
-                namedEntityDetected(taggedWords, [i]);
+                onEntityDetected(taggedWords, [i]);
                 return 'neuter';
             default:
                 break;
         }
     }
-    // no entity at all...
-    namedEntityDetected(taggedWords, null)
 }

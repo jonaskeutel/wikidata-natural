@@ -173,6 +173,9 @@ exports.answer = function(question, callback, fallback) {
                     }
                 }
             } else {
+                if (data.property.label == 'population') {
+                    queryResult = [queryResult[queryResult.length - 1]];
+                }
                 data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
                 var answerIdPart = queryResult[queryResult.length - 1].objectLabel.value; // if there are multiple answers, just take the last for the moment...
                 conversationHistory.addAnswer(data.answer, questionId);

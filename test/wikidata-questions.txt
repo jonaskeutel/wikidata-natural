@@ -4,12 +4,13 @@ What is the gender of Deshauna Barber?;getPropertyValue;Deshauna Barber;sex or g
 Which country is Deshauna Barber a citizen of?;getPropertyValue;Deshauna Barber;country of citizenship;United States of America
 Was the Gotthard Base Tunnel opened before 2016?;comparePropertyValue;Gotthard Base Tunnel;date of official opening;false
 Where is the Gotthard Base Tunnel?;getPropertyValue;Gotthard Base Tunnel;coordinate location;46°36'0"N, 8°45'54"E
-Does the Gotthard Base Tunnel have a website?;getPropertyValue;Gotthard Base Tunnel;official website;https://www.alptransit-portal.ch/en/landingpage/
+What is the website of the Gotthard Base Tunnel?;getPropertyValue;Gotthard Base Tunnel;official website;https://www.alptransit-portal.ch/en/landingpage/
 Who is Mikhail Bulgakov?;getDescription;Mikhail Bulgakov;None;Russian author primarily known for his novel "Master and Margarita"
 What was the Soviet Union’s motto?;getPropertyValue;Soviet Union;motto;Workers of the world, unite!
 What country’s TLD is .su?;getPropertyValue;.su;country;Soviet Union
 Was the Soviet Union a federal republic?;comparePropertyValue;Soviet Union;instance of;true
 What currency was used in the Soviet Union?;getPropertyValue;Soviet Union;currency;Soviet ruble
+What was the currency of the Soviet Union?;getPropertyValue;Soviet Union;currency;Soviet ruble
 What continent is Turkey on?;getPropertyValue;Turkey;continent;Asia
 What timezone does Turkey have?;getPropertyValue;Turkey;located in time zone;UTC+02:00
 Whats the population of Turkey?;getPropertyValue;Turkey;population;75932641
@@ -18,7 +19,7 @@ Who is the mother of Muhammad Ali?;getPropertyValue;Muhammad Ali;mother;Odessa G
 How many Children did Muhammad Ali have?;getPropertyValue;Muhammad Ali;number of children;9
 What does Hervé Baudry do?;getPropertyValue;Hervé Baudry;occupation;caicaturist
 In what country is Montmartre?;getPropertyValue;Montmartre;country;France
-When was Paris founded?;getPropertyValue;Paris;inception;300 BCE
+When was Paris founded?;getPropertyValue;Paris;inception;-299-01-01T00:00:00Z
 Does Paris share a border with Gentilly?;comparePropertyValue;Paris;shares border with;true
 What’s the zip code of Paris?;getPropertyValue;Paris;postal code;75116
 What’s the symbol for the currency Euro?;getPropertyValue;Euro;unit symbol;€
@@ -27,7 +28,7 @@ What’s the TeX string for Euro?;getPropertyValue;Euro;TeX string;\texteuro
 Where was AC/DC founded?;getPropertyValue;AC/DC;location of formation;Sydney
 What genre is AC/DC?;getPropertyValue;AC/DC;genre;rock and roll
 What is electric current?;getDescription;electric current;None;flow of electric charge (for a specific quantities see Q29996 or Q234072)
-When was Circus of Love published?;getPropertyValue;CircusOfLove;publication date;19 June 1954
+When was Circus of Love published?;getPropertyValue;Circus of Love;publication date;1954-06-19T00:00:00Z
 What language is Circus of Love in?;getPropertyValue;Circus of Love;original language of work;German
 Who directed Circus of Love?;getPropertyValue;Circus of Love;director;Kurt Neumann
 What’s Circus of Love’s duration?;getPropertyValue;Circus of Love;duration;93 minutes
@@ -42,8 +43,7 @@ What’s Marie Curie’s Erdős number?;getPropertyValue;Marie Curie;Erdős numb
 Who was Douglas Adams’ employer?;getPropertyValue;Douglas Adams;employer;BBC
 Whats the writing system of Esperanto?;getPropertyValue;Esperanto;writing system;Latin script
 Who created Esperanto?;getPropertyValue;Esperanto;creator;Ludwik Lejzer Zamenhof
-When was Esperanto created?;getPropertyValue;Esperanto;inception;26 July 1887
-What was Iron Man bysed on?;getPropertyValue;Iron Man;based on;Iron Man
+When was Esperanto created?;getPropertyValue;Esperanto;inception;1887-07-26T00:00:00Z
 Whats a narrative location of Iron Man?;getPropertyValue;Iron Man;narrative location;Afghanistan
 Whats the aspect ratio of Iron Man?;getPropertyValue;Iron Man;aspect ratio;2.35:1
 Whats the chemical formula or ethanol?getPropertyValue;ethanol;chemical formula;C₂H₆O

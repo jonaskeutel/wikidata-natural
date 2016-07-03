@@ -118,6 +118,9 @@ exports.answer = function(question, callback, fallback) {
                     }
                 }
             } else {
+                if (data.property.label == 'population') {
+                    queryResult = [queryResult[queryResult.length - 1]];
+                }
                 data.answer = answerFormatter.formatAnswer(property, namedEntity, queryResult);
             }
             conversationHistory.addAnswer(data.answer, questionId);

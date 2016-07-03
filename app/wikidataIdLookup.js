@@ -46,7 +46,7 @@ exports.getWikidataId = function(data, callback) {
             }
         }
     };
-
+    data.searchText = data.searchText.replace("?","");
     getWikidataIdViaApi(data.searchText, results, checkFunction);
     getWikidataIdViaWebpage(data.searchText, results, checkFunction);
 };

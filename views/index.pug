@@ -1,13 +1,15 @@
 doctype html
 html
     head
-        title Ask Wikidata
+        title Wikidata Natural
         script(src='/scripts/frontend.js')
         link(rel='stylesheet', href='/stylesheets/style.css')
         link(href='https://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
+        link(rel="icon", type="image/png", href="/images/favicon.png")
         meta(name='viewport', content='width=device-width, initial-scale=0.6')
     body
-        h1 Ask Wikidata
+        h1
+            img(src='/images/logo_white_plain.svg' alt='Wikidata Natural')
         #conversation
             if conversation
                 each value in conversation

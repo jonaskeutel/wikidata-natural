@@ -6,6 +6,7 @@ var inputField;
 var previousQuestions = [];
 var displayedPreviousQuestionIndex;
 var currentUnsentMessage = "";
+var throbber;
 
 function initialize() {
     inputField = document.getElementById("question");
@@ -82,6 +83,7 @@ function submitQuestion() {
     var questionText = inputField.value;
     previousQuestions.push(questionText);
     displayMessage(questionText, "question");
+    displayThrobber();
     submitApi(questionText);
     setTimeout(function() {inputField.value = "";}, 0);
     displayedPreviousQuestionIndex = previousQuestions.length;
@@ -89,6 +91,7 @@ function submitQuestion() {
 }
 
 function displayMessage(content, author) {
+    hideThrobber();
     var messageTextNode = document.createTextNode(content);
     var messageBubble = document.createElement("div");
     messageBubble.classList.add("message");
@@ -113,6 +116,20 @@ function submitApi(questionText) {
 function displayInterpretationAndAnswer(result) {
     displayMessage(result.interpretation, "interpretation");
     displayMessage(result.answer, "answer");
+}
+
+function displayThrobber() {
+    throbber = document.createElement('img');
+    throbber.setAttribute('src', 'images/throbber.gif');
+    throbber.setAttribute('id', 'throbber');
+    document.getElementById("conversation").appendChild(throbber);
+    document.getElementById("conversation").scrollTop = 100000000;
+}
+
+function hideThrobber() {
+    if (throbber && throbber.parentNode) {
+       throbber.parentNode.removeChild(throbber);
+    }
 }
 
 function shuffle(array) {

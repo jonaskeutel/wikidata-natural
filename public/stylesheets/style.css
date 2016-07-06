@@ -27,6 +27,12 @@ h1 {
     color: white;
 }
 
+h1 img {
+    width: 6em;
+    margin-top: -0.2em;
+    margin-bottom: -0.2em;
+}
+
 #conversation {
     width: calc(100% - 2px);
     border: 1px solid #1A864F;
@@ -69,4 +75,9 @@ input {
     position: absolute; left: -9999px;
     width: 1px;
     height: 1px;
+}
+
+#throbber {
+    margin: 5px auto;
+    display: block;
 }

@@ -18,7 +18,7 @@ exports.findNamedEntity = function(taggedWords, questionId, onEntityDetected, on
             returnHistoryEntityInstead(onEntityFound, questionId, onEntityDetected, taggedWords);
             return;
         }
-        onEntityFound(null, {id: data.id, label: data.label, gender: namedEntity.gender, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
+        onEntityFound(null, {id: data.id, label: data.label, possibleGenders: namedEntity.possibleGenders, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
     });
 };
 
@@ -34,11 +34,11 @@ function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId,
     for (var i = questionId - 1; i > questionId - 4 && i >= 0; i--) {
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
-        if (answerEntity && answerEntity.id && isMatchingGender(answerEntity.gender, queryGender)) {
+        if (answerEntity && answerEntity.id && isMatchingGender(answerEntity.possibleGenders, queryGender)) {
             onEntityFound(null, answerEntity);
             return;
         }
-        if (namedEntity && namedEntity.id && isMatchingGender(namedEntity.gender, queryGender)) {
+        if (namedEntity && namedEntity.id && isMatchingGender(namedEntity.possibleGenders, queryGender)) {
             onEntityFound(null, namedEntity);
             return;
         }
@@ -47,15 +47,15 @@ function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId,
     onEntityFound("Could not find an entity in your question nor in conversation history.");
 }
 
-function isMatchingGender(entityGender, queryGender) {
-    var isSubstring = (entityGender.indexOf(queryGender) !== -1);
-    return isSubstring;
+function isMatchingGender(possibleEntityGenders, queryGender) {
+    var isContained = (possibleEntityGenders.indexOf(queryGender) !== -1);
+    return isContained;
 }
 
 function extractNamedEntity(taggedWords, onEntityDetected) {
     var positions = [];
     var type;
-    var gender;
+    var possibleGenders;
     var namedEntityString = "";
     var entitySpecifierString = "";
     var entitySpecifierType;
@@ -84,13 +84,13 @@ function extractNamedEntity(taggedWords, onEntityDetected) {
 
     onEntityDetected(taggedWords, positions);
     if (type === "PERSON") {
-        gender = 'maleORfemale';
+        possibleGenders = ['male', 'female'];
     } else {
-        gender = 'neuter';
+        possibleGenders = ['neuter'];
     }
     return {
         string: namedEntityString.trim(),
-        gender: gender,
+        possibleGenders: possibleGenders,
         type: type,
         specifier: entitySpecifier,
         specifierType: entitySpecifierType

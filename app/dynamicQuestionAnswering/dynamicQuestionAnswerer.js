@@ -61,6 +61,7 @@ exports.answer = function(question, callback, fallback) {
             return;
         }
         conversationHistory.addProperty(property, questionId);
+        console.log('adding history named entity:', namedEntity);
         conversationHistory.addNamedEntity(namedEntity, questionId);
 
         var query = queryBuilder.genercicSingleStatement(namedEntity.id, property.id);
@@ -129,11 +130,11 @@ exports.answer = function(question, callback, fallback) {
                 multipleAnswers: queryResult.length > 1 ? true : false
             };
             if (queryResult[0].genderLabel) {
-                answerEntity.gender = queryResult[0].genderLabel.value;
+                answerEntity.possibleGenders = [queryResult[0].genderLabel.value];
             } else if (id) {
-                answerEntity.gender = 'neuter';
+                answerEntity.possibleGenders = ['neuter'];
             } else {
-                answerEntity.gender = null;
+                answerEntity.possibleGenders = null;
             }
             console.log(answerEntity);
             data.result = answerEntity;

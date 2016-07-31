@@ -8,7 +8,7 @@ var conversationHistory = require('./../conversationHistory.js');
 
 var propertyPartsArray = []; //global...
 
-exports.findPropertyId = function(taggedWords, questionId, positions, callback) {
+exports.findWikidataProperty = function(taggedWords, questionId, positions, callback) {
     console.log("Named entity is at position: " + positions)
     var propertyString = findProperty(taggedWords, positions);
 

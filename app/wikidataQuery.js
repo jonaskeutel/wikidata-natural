@@ -1,6 +1,6 @@
 "use strict";
 
-var DynamicQuestionAnswerer = require('./dynamicQuestionAnswering/dynamicQuestionAnswerer');
+var DynamicQuestionAnswerer = require('./dynamicQuestionAnswering/DynamicQuestionAnswerer');
 var staticIntentAnswerer = require('./staticIntentAnswering/staticIntentAnswerer');
 
 exports.answer = function(question, callback) {

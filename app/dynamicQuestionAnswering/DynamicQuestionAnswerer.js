@@ -24,13 +24,14 @@ class DynamicQuestionAnswerer {
         new QuestionParser(self.questionId, self.question, self.onQuestionParsed).run();
     }
 
-    onQuestionParsed(err, wikidataProperty, wikidataEntity) {
+    onQuestionParsed(err, wikidataProperty, wikidataEntity, specifier) {
         if (err) {
             self.callback({answer: err});
             return;
         }
         self.wikidataEntity = wikidataEntity;
         self.wikidataProperty = wikidataProperty;
+        self.specifier = {value: wikidataEntity.specifier, type: wikidataEntity.specifierType};
         self.interpretationString = wikidataProperty.label + ' of ' + wikidataEntity.label + '?';
         conversationHistory.addInterpretation(wikidataEntity, wikidataProperty, self.interpretationString, self.questionId);
 
@@ -50,7 +51,7 @@ class DynamicQuestionAnswerer {
             result: null
         };
 
-        var results = resultSelector.filter(queryResultRaw, self.wikidataEntity.specifier, self.wikidataEntity.specifierType);
+        var results = resultSelector.filter(queryResultRaw, self.wikidataProperty, self.specifier);
 
         if (results.length === 0) {
             data.answer = "Sorry, I didn't find an answer on Wikidata. Maybe its data is incomplete. " +

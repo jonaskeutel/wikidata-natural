@@ -9,7 +9,7 @@ exports.formatAnswer = function(property, namedEntity, result) {
         for (var i = 0; i < result.length - 1; i++) {
             answer += formatResult(result[i]) + ", ";
         }
-        answer = answer.slice(0, answer.length - 2)
+        answer = answer.slice(0, answer.length - 2);
         answer += " and " + formatResult(result[result.length - 1]) + ".";
     }
 	return answer;
@@ -28,7 +28,7 @@ function formatIs(result) {
     if (result.length > 1) {
         return " are ";
     }
-    return " is "
+    return " is ";
 }
 
 function formatResult(result) {
@@ -41,9 +41,9 @@ function formatResult(result) {
 		formattedAnswer = result.objectLabel.value;
 	}
 	if (result.year) {
-		return formattedAnswer + ' (' + result.year.value + ')'
+		return formattedAnswer + ' (in ' + result.year.value + ')';
 	}
-	return formattedAnswer
+	return formattedAnswer;
 }
 
 function datatypeOf(result) {

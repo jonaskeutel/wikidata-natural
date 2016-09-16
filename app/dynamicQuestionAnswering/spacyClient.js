@@ -3,7 +3,7 @@
 var Client = require('node-rest-client').Client;
 var client = new Client();
 
-exports.getSpacyTaggedWords = function(question, callback) {
+exports.getTaggedWords = function(question, callback) {
 	var url = "http://localhost:7000/";
 	var data = {question: question};
 	var args = {data: data, headers: {"Content-Type": "application/json"}};

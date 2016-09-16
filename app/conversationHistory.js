@@ -12,8 +12,10 @@ var conversationHistory = {
         return m_messages.length - 1;
     },
 
-    addInterpretation: function(interpretation, id) {
-        m_messages[id].interpretation = interpretation;
+    addInterpretation: function(wikidataEntity, wikidataProperty, interpretationString, id) {
+        m_messages[id].namedEntity = wikidataEntity;
+        m_messages[id].property = wikidataProperty;
+        m_messages[id].interpretation = interpretationString;
     },
 
     addAnswer: function(answer, id) {
@@ -23,16 +25,6 @@ var conversationHistory = {
     // AnswerEntity is object with keys 'id' and 'label'
     addAnswerEntity: function(answerEntity, id) {
         m_messages[id].answerEntity = answerEntity;
-    },
-
-    // namedEntity is object with keys 'id' and 'label'
-    addNamedEntity: function(namedEntity, id) {
-        m_messages[id].namedEntity = namedEntity;
-    },
-
-    // property is object with keys 'id' and 'label'
-    addProperty: function(property, id) {
-        m_messages[id].property = property;
     },
 
     isEmpty: function() {

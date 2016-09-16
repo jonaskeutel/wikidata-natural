@@ -4,28 +4,35 @@ var wikidataIdLookup = require('./../wikidataIdLookup');
 var conversationHistory = require('./../conversationHistory.js');
 
 
-exports.findNamedEntity = function(taggedWords, questionId, onEntityDetected, onEntityFound) {
+exports.findWikidataEntity = function(taggedWords, questionId, onEntityDetected, onWikidataEntityFound) {
     var namedEntity = extractNamedEntity(taggedWords, onEntityDetected);
 
     if (namedEntity.string === "") {
-        returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId, taggedWords);
+        returnHistoryEntityInstead(onWikidataEntityFound, onEntityDetected, questionId, taggedWords);
         return;
     }
     console.log("Extracted Named Entity:", namedEntity.string.trim());
 
     wikidataIdLookup.getWikidataId({searchText: namedEntity.string.trim()}, function(err, data) {
         if (err) {
-            returnHistoryEntityInstead(onEntityFound, questionId, onEntityDetected, taggedWords);
+            returnHistoryEntityInstead(onWikidataEntityFound, questionId, onEntityDetected, taggedWords);
             return;
         }
-        onEntityFound(null, {id: data.id, label: data.label, possibleGenders: namedEntity.possibleGenders, type: namedEntity.type, specifier: namedEntity.specifier, specifierType: namedEntity.specifierType});
+        onWikidataEntityFound(null, {
+            id: data.id,
+            label: data.label,
+            possibleGenders: namedEntity.possibleGenders,
+            type: namedEntity.type,
+            specifier: namedEntity.specifier,
+            specifierType: namedEntity.specifierType
+        });
     });
 };
 
 
-function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId, taggedWords) {
+function returnHistoryEntityInstead(onWikidataEntityFound, onEntityDetected, questionId, taggedWords) {
     if (conversationHistory.wasEmpty()) {
-        onEntityFound("Could not find an entity in your question nor in conversation history.");
+        onWikidataEntityFound("Could not find an entity in your question nor in conversation history.");
         return;
     }
 
@@ -35,16 +42,16 @@ function returnHistoryEntityInstead(onEntityFound, onEntityDetected, questionId,
         var answerEntity = conversationHistory.messages()[i].answerEntity;
         var namedEntity = conversationHistory.messages()[i].namedEntity;
         if (answerEntity && answerEntity.id && isMatchingGender(answerEntity.possibleGenders, queryGender)) {
-            onEntityFound(null, answerEntity);
+            onWikidataEntityFound(null, answerEntity);
             return;
         }
         if (namedEntity && namedEntity.id && isMatchingGender(namedEntity.possibleGenders, queryGender)) {
-            onEntityFound(null, namedEntity);
+            onWikidataEntityFound(null, namedEntity);
             return;
         }
     }
 
-    onEntityFound("Could not find an entity in your question nor in conversation history.");
+    onWikidataEntityFound("Could not find an entity in your question nor in conversation history.");
 }
 
 function isMatchingGender(possibleEntityGenders, queryGender) {
